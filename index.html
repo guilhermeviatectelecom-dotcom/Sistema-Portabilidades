@@ -651,11 +651,12 @@
         </div>
 
         <nav class="menu">
-          <button id="menuNova" onclick="showView('nova')">Nova solicitação</button>
-          <button id="menuMinhas" onclick="showView('minhas')">Minhas solicitações</button>
-          <button id="menuDashboard" class="admin-only" onclick="showView('dashboard')">Dashboard</button>
-          <button id="menuHistorico" class="admin-only" onclick="showView('historico')">Histórico geral</button>
-          <button id="menuUsuarios" class="admin-only" onclick="showView('usuarios')">Usuários</button>
+         <button id="menuNova" onclick="showView('nova')">Nova solicitação</button>
+<button id="menuMinhas" onclick="showView('minhas')">Minhas solicitações</button>
+<button id="menuDashboard" class="admin-only" onclick="showView('dashboard')">Dashboard</button>
+<button id="menuRecebidas" class="admin-only" onclick="showView('recebidas')">Solicitações recebidas</button>
+<button id="menuHistorico" class="admin-only" onclick="showView('historico')">Histórico geral</button>
+<button id="menuUsuarios" class="admin-only" onclick="showView('usuarios')">Usuários</button>
         </nav>
 
         <button class="btn btn-dark logout" onclick="logout()">Sair</button>
@@ -712,7 +713,38 @@
 
           <div class="grid grid-4" id="dashboardCards"></div>
         </section>
+<section id="viewRecebidas" class="view hidden admin-only">
+  <div class="topbar">
+    <div>
+      <h2>Solicitações recebidas</h2>
+      <p>Novas portabilidades aguardando envio ou tratamento pelo NOC.</p>
+    </div>
+    <button class="btn btn-light" onclick="carregarRecebidas()">Atualizar</button>
+  </div>
 
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Cliente</th>
+            <th>CPF/CNPJ</th>
+            <th>Número</th>
+            <th>Cidade</th>
+            <th>Plano</th>
+            <th>Atendente</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="recebidasTabela"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+        
         <section id="viewHistorico" class="view hidden admin-only">
           <div class="topbar">
             <div>
@@ -970,17 +1002,17 @@
         el.style.display = usuarioLogado.perfil === "admin" ? "" : "none";
       });
 
-      if (usuarioLogado.perfil === "admin") {
-        showView("dashboard");
-        carregarDashboard();
-        carregarHistorico();
-        carregarUsuarios();
-      } else {
-        showView("nova");
-        carregarMinhasSolicitacoes();
-      }
-    }
-
+     if (usuarioLogado.perfil === "admin") {
+  showView("recebidas");
+  carregarRecebidas();
+  carregarDashboard();
+  carregarHistorico();
+  carregarUsuarios();
+} else {
+  showView("nova");
+  carregarMinhasSolicitacoes();
+}
+}
     function logout() {
       localStorage.removeItem("portabilidade_usuario");
       usuarioLogado = null;
@@ -997,11 +1029,13 @@
       const menuEl = document.getElementById("menu" + capitalize(view));
       if (menuEl) menuEl.classList.add("active");
 
-      if (view === "minhas") carregarMinhasSolicitacoes();
-      if (view === "dashboard") carregarDashboard();
-      if (view === "historico") carregarHistorico();
-      if (view === "usuarios") carregarUsuarios();
-    }
+    if (view === "minhas") carregarMinhasSolicitacoes();
+if (view === "dashboard") carregarDashboard();
+if (view === "recebidas") carregarRecebidas();
+if (view === "historico") carregarHistorico();
+if (view === "usuarios") carregarUsuarios();
+      }
+      
 
     function capitalize(str) {
       return str.charAt(0).toUpperCase() + str.slice(1);
@@ -1657,7 +1691,71 @@ Status: ${dados.status || "Dados recebidos"}`;
       document.getElementById("modalBackdrop").classList.add("hidden");
       document.getElementById("modalContent").innerHTML = "";
     }
+async function carregarRecebidas() {
+  if (usuarioLogado?.perfil !== "admin") return;
 
+  const { data, error } = await supabaseClient
+    .from("portabilidades")
+    .select("*")
+    .eq("status", "Dados recebidos")
+    .order("criado_em", { ascending: false });
+
+  const tbody = document.getElementById("recebidasTabela");
+
+  if (error) {
+    tbody.innerHTML = `<tr><td colspan="9">Erro ao carregar solicitações recebidas.</td></tr>`;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="9">Nenhuma solicitação nova no momento.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map(item => `
+    <tr>
+      <td>${formatDate(item.criado_em)}</td>
+      <td>${escapeHTML(item.nome_titular)}</td>
+      <td>${escapeHTML(item.cpf_cnpj)}</td>
+      <td>${escapeHTML(item.numero_linha)}</td>
+      <td>${escapeHTML(item.cidade)}</td>
+      <td>${escapeHTML(item.plano_contratado || "Não informado")}</td>
+      <td>${escapeHTML(item.atendente_nome || "-")}</td>
+      <td>
+        <select onchange="alterarStatusRecebida('${item.id}', this.value)">
+          <option value="Dados recebidos" selected>Dados recebidos</option>
+          <option value="Enviado para portabilidade">Enviado para portabilidade</option>
+          <option value="Portabilidade concluída">Portabilidade concluída</option>
+          <option value="Erro">Erro</option>
+        </select>
+      </td>
+      <td>
+        <div class="actions">
+          <button class="btn btn-light" onclick='abrirModalPortabilidade(${JSON.stringify(item)})'>Ver/Editar</button>
+          <button class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(item)})'>PDF</button>
+          <button class="btn btn-green" onclick='notificarNOC(${JSON.stringify(item)})'>Notificar</button>
+        </div>
+      </td>
+    </tr>
+  `).join("");
+}
+
+async function alterarStatusRecebida(id, novoStatus) {
+  const { error } = await supabaseClient
+    .from("portabilidades")
+    .update({ status: novoStatus })
+    .eq("id", id);
+
+  if (error) {
+    alert("Erro ao alterar status.");
+    return;
+  }
+
+  await carregarRecebidas();
+  await carregarHistorico();
+  await carregarDashboard();
+}
+    
     function statusBadge(status) {
       let cls = "dados";
 
