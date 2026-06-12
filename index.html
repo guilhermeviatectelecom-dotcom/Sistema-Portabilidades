@@ -599,6 +599,67 @@
         padding: 24px;
       }
     }
+.termo-box {
+  background: #ffffff;
+  border: 1px solid var(--cinza-borda);
+  border-radius: 18px;
+  padding: 20px;
+  line-height: 1.55;
+}
+
+.termo-box h3,
+.termo-box h4 {
+  margin-top: 0;
+  color: var(--azul-escuro);
+}
+
+.termo-dados {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+  padding: 14px;
+  background: #f8fbff;
+  border: 1px solid #dbe7ff;
+  border-radius: 14px;
+}
+
+.termo-dados p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.signature-area {
+  margin-top: 18px;
+  border: 1px dashed #9db8e8;
+  border-radius: 16px;
+  padding: 14px;
+  background: #f8fbff;
+}
+
+#signatureCanvas {
+  width: 100%;
+  height: 190px;
+  background: #fff;
+  border: 1px solid var(--cinza-borda);
+  border-radius: 14px;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.signature-line {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+@media (max-width: 720px) {
+  .termo-dados {
+    grid-template-columns: 1fr;
+  }
+}
+    
   </style>
 </head>
 
@@ -863,93 +924,181 @@
     let historicoCache = [];
     let usuariosCache = [];
 
-    const formData = {
-      nome_titular: "",
-      cpf_cnpj: "",
-      cidade: "",
-      numero_linha: "",
-      plano_contratado: "",
-      anexoFile: null
-    };
+   const formData = {
+  nome_titular: "",
+  cpf_cnpj: "",
+  endereco: "",
+  cidade: "",
+  estado: "",
+  numero_linha: "",
+  operadora_atual: "",
+  data_prevista_portabilidade: "",
+  plano_contratado: "",
+  anexoFile: null,
+  termo_aceito: false,
+  assinaturaDataUrl: null
+};
 
-    const steps = [
-      {
-        title: "Nome do titular da linha fixa",
-        field: "nome_titular",
-        required: true,
-        html: `
-          <div class="form-group">
-            <label>Nome do titular da linha fixa *</label>
-            <input id="nome_titular" placeholder="Ex: João da Silva" required>
-          </div>
-        `
-      },
-      {
-        title: "CPF ou CNPJ",
-        field: "cpf_cnpj",
-        required: true,
-        html: `
-          <div class="form-group">
-            <label>CPF/CNPJ *</label>
-            <input id="cpf_cnpj" placeholder="Digite o CPF ou CNPJ" required oninput="mascaraCpfCnpj(this)">
-          </div>
-        `
-      },
-      {
-        title: "Cidade",
-        field: "cidade",
-        required: true,
-        html: `
-          <div class="form-group">
-            <label>Cidade *</label>
-            <input id="cidade" placeholder="Ex: Campo Novo/RS" required>
-          </div>
-        `
-      },
-      {
-        title: "Número da linha fixa",
-        field: "numero_linha",
-        required: true,
-        html: `
-          <div class="form-group">
-            <label>Número da linha fixa *</label>
-            <input id="numero_linha" placeholder="Ex: 55 0000-0000" required oninput="mascaraTelefone(this)">
-          </div>
-        `
-      },
-      {
-        title: "Plano contratado",
-        field: "plano_contratado",
-        required: false,
-        html: `
-          <div class="form-group">
-            <label>Plano contratado</label>
-            <input id="plano_contratado" placeholder="Opcional. Pode deixar em branco">
-            <p class="small">Esse campo não é obrigatório, pois às vezes o plano é fechado depois da portabilidade.</p>
-          </div>
-        `
-      },
-      {
-        title: "Anexo da fatura antiga",
-        field: "anexoFile",
-        required: false,
-        html: `
-          <div class="form-group">
-            <label>Fatura antiga da linha telefônica</label>
-            <input id="anexoFile" type="file" accept=".pdf,.jpg,.jpeg,.png">
-            <p class="small">Opcional. Pode anexar PDF, JPG ou PNG.</p>
-          </div>
-        `
-      },
-      {
-        title: "Resumo final",
-        field: "resumo",
-        required: false,
-        html: `
-          <div class="summary-box" id="resumoFinal"></div>
-        `
-      }
-    ];
+let assinaturaDesenhada = false;
+
+ const steps = [
+  {
+    title: "Nome do titular da linha fixa",
+    field: "nome_titular",
+    required: true,
+    html: `
+      <div class="form-group">
+        <label>Nome do titular da linha fixa *</label>
+        <input id="nome_titular" placeholder="Ex: João da Silva" required>
+      </div>
+    `
+  },
+  {
+    title: "CPF ou CNPJ",
+    field: "cpf_cnpj",
+    required: true,
+    html: `
+      <div class="form-group">
+        <label>CPF/CNPJ *</label>
+        <input id="cpf_cnpj" placeholder="Digite o CPF ou CNPJ" required oninput="mascaraCpfCnpj(this)">
+      </div>
+    `
+  },
+  {
+    title: "Endereço",
+    field: "endereco",
+    required: true,
+    html: `
+      <div class="form-group">
+        <label>Endereço *</label>
+        <input id="endereco" placeholder="Rua, número, bairro" required>
+      </div>
+    `
+  },
+  {
+    title: "Cidade",
+    field: "cidade",
+    required: true,
+    html: `
+      <div class="form-group">
+        <label>Cidade *</label>
+        <input id="cidade" placeholder="Ex: Campo Novo" required>
+      </div>
+    `
+  },
+  {
+    title: "Estado",
+    field: "estado",
+    required: true,
+    html: `
+      <div class="form-group">
+        <label>Estado *</label>
+        <select id="estado" required>
+          <option value="">Selecione</option>
+          <option value="AC">AC</option>
+          <option value="AL">AL</option>
+          <option value="AP">AP</option>
+          <option value="AM">AM</option>
+          <option value="BA">BA</option>
+          <option value="CE">CE</option>
+          <option value="DF">DF</option>
+          <option value="ES">ES</option>
+          <option value="GO">GO</option>
+          <option value="MA">MA</option>
+          <option value="MT">MT</option>
+          <option value="MS">MS</option>
+          <option value="MG">MG</option>
+          <option value="PA">PA</option>
+          <option value="PB">PB</option>
+          <option value="PR">PR</option>
+          <option value="PE">PE</option>
+          <option value="PI">PI</option>
+          <option value="RJ">RJ</option>
+          <option value="RN">RN</option>
+          <option value="RS">RS</option>
+          <option value="RO">RO</option>
+          <option value="RR">RR</option>
+          <option value="SC">SC</option>
+          <option value="SP">SP</option>
+          <option value="SE">SE</option>
+          <option value="TO">TO</option>
+        </select>
+      </div>
+    `
+  },
+  {
+    title: "Número da linha fixa",
+    field: "numero_linha",
+    required: true,
+    html: `
+      <div class="form-group">
+        <label>Número da linha fixa *</label>
+        <input id="numero_linha" placeholder="Ex: 55 0000-0000" required oninput="mascaraTelefone(this)">
+      </div>
+    `
+  },
+  {
+    title: "Operadora atual",
+    field: "operadora_atual",
+    required: true,
+    html: `
+      <div class="form-group">
+        <label>Operadora atual *</label>
+        <input id="operadora_atual" placeholder="Ex: Vivo, Oi, Claro, Embratel..." required>
+      </div>
+    `
+  },
+  {
+    title: "Data prevista da portabilidade",
+    field: "data_prevista_portabilidade",
+    required: true,
+    html: `
+      <div class="form-group">
+        <label>Data prevista da portabilidade *</label>
+        <input id="data_prevista_portabilidade" type="date" required>
+        <p class="small">Use a data prevista para conclusão/ativação da portabilidade.</p>
+      </div>
+    `
+  },
+  {
+    title: "Plano contratado",
+    field: "plano_contratado",
+    required: false,
+    html: `
+      <div class="form-group">
+        <label>Plano contratado</label>
+        <input id="plano_contratado" placeholder="Opcional. Pode deixar em branco">
+        <p class="small">Esse campo não é obrigatório, pois às vezes o plano é fechado depois da portabilidade.</p>
+      </div>
+    `
+  },
+  {
+    title: "Anexo da fatura antiga",
+    field: "anexoFile",
+    required: false,
+    html: `
+      <div class="form-group">
+        <label>Fatura antiga da linha telefônica</label>
+        <input id="anexoFile" type="file" accept=".pdf,.jpg,.jpeg,.png">
+        <p class="small">Opcional. Pode anexar PDF, JPG ou PNG.</p>
+      </div>
+    `
+  },
+  {
+    title: "Termo de portabilidade",
+    field: "termo",
+    required: true,
+    html: ``
+  },
+  {
+    title: "Resumo final",
+    field: "resumo",
+    required: false,
+    html: `
+      <div class="summary-box" id="resumoFinal"></div>
+    `
+  }
+];
 
     document.addEventListener("DOMContentLoaded", () => {
       const saved = localStorage.getItem("portabilidade_usuario");
@@ -1054,7 +1203,13 @@ if (view === "usuarios") carregarUsuarios();
       const step = steps[currentStep];
 
       document.getElementById("stepTitle").textContent = step.title;
-      document.getElementById("stepContent").innerHTML = step.html;
+
+if (step.field === "termo") {
+  document.getElementById("stepContent").innerHTML = renderTermoHTML();
+  setTimeout(setupAssinaturaCanvas, 100);
+} else {
+  document.getElementById("stepContent").innerHTML = step.html;
+}
 
       if (step.field !== "resumo" && step.field !== "anexoFile") {
         const input = document.getElementById(step.field);
@@ -1065,9 +1220,41 @@ if (view === "usuarios") carregarUsuarios();
         document.getElementById("plano_contratado").value = formData.plano_contratado || "";
       }
 
-      if (step.field === "resumo") {
-        document.getElementById("resumoFinal").textContent = gerarResumoTexto();
+      function gerarResumoTexto(item = null) {
+  const dados = item || {
+    nome_titular: formData.nome_titular,
+    cpf_cnpj: formData.cpf_cnpj,
+    endereco: formData.endereco,
+    cidade: formData.cidade,
+    estado: formData.estado,
+    numero_linha: formData.numero_linha,
+    operadora_atual: formData.operadora_atual,
+    data_prevista_portabilidade: formData.data_prevista_portabilidade,
+    plano_contratado: formData.plano_contratado || "Não informado",
+    atendente_nome: usuarioLogado ? usuarioLogado.nome : "",
+    status: "Dados recebidos",
+    termo_aceito: formData.termo_aceito
+  };
+
+  return `Nova solicitação de portabilidade cadastrada:
+
+Cliente: ${dados.nome_titular || ""}
+CPF/CNPJ: ${dados.cpf_cnpj || ""}
+Endereço: ${dados.endereco || ""}
+Cidade/UF: ${dados.cidade || ""}/${dados.estado || ""}
+Número: ${dados.numero_linha || ""}
+Operadora atual: ${dados.operadora_atual || ""}
+Data prevista: ${formatDateOnly(dados.data_prevista_portabilidade)}
+Plano contratado: ${dados.plano_contratado || "Não informado"}
+Termo assinado: ${dados.termo_aceito ? "Sim" : "Não"}
+Atendente: ${dados.atendente_nome || ""}
+Status: ${dados.status || "Dados recebidos"}`;
+}
       }
+      if (step.field === "estado") {
+  const select = document.getElementById("estado");
+  if (select) select.value = formData.estado || "";
+}
 
       document.getElementById("btnVoltar").classList.toggle("hidden", currentStep === 0);
       document.getElementById("btnProximo").classList.toggle("hidden", currentStep === steps.length - 1);
@@ -1079,7 +1266,19 @@ if (view === "usuarios") carregarUsuarios();
     function saveCurrentStep() {
       const step = steps[currentStep];
 
-      if (step.field === "resumo") return true;
+if (step.field === "resumo") return true;
+
+if (step.field === "termo") {
+  salvarAssinaturaAtual();
+
+  if (!formData.assinaturaDataUrl) {
+    showWizardError("O cliente precisa assinar o termo para continuar.");
+    return false;
+  }
+
+  formData.termo_aceito = true;
+  return true;
+}
 
       if (step.field === "anexoFile") {
         const fileInput = document.getElementById("anexoFile");
@@ -1146,19 +1345,76 @@ if (view === "usuarios") carregarUsuarios();
           anexoUrl = publicData.publicUrl;
           anexoNome = file.name;
         }
+        let termoPdfUrl = null;
+let termoPdfNome = null;
+let assinaturaUrl = null;
 
-        const payload = {
-          nome_titular: formData.nome_titular,
-          cpf_cnpj: formData.cpf_cnpj,
-          cidade: formData.cidade,
-          numero_linha: formData.numero_linha,
-          plano_contratado: formData.plano_contratado || null,
-          anexo_fatura_url: anexoUrl,
-          anexo_fatura_nome: anexoNome,
-          status: "Dados recebidos",
-          atendente_id: usuarioLogado.id,
-          atendente_nome: usuarioLogado.nome
-        };
+if (!formData.assinaturaDataUrl) {
+  msg.innerHTML = `<div class="msg error">O termo precisa estar assinado antes de finalizar.</div>`;
+  return;
+}
+
+const termoPdfBlob = gerarTermoPDFBlob(false);
+const termoPdfFileName = `termo-portabilidade-${Date.now()}-${limparNomeArquivo(formData.nome_titular)}.pdf`;
+const termoPdfPath = `${usuarioLogado.id}/${termoPdfFileName}`;
+
+const { error: termoUploadError } = await supabaseClient.storage
+  .from("termos-portabilidade")
+  .upload(termoPdfPath, termoPdfBlob, {
+    contentType: "application/pdf",
+    upsert: false
+  });
+
+if (termoUploadError) throw termoUploadError;
+
+const { data: termoPublicData } = supabaseClient.storage
+  .from("termos-portabilidade")
+  .getPublicUrl(termoPdfPath);
+
+termoPdfUrl = termoPublicData.publicUrl;
+termoPdfNome = termoPdfFileName;
+
+const assinaturaBlob = dataURLtoBlob(formData.assinaturaDataUrl);
+const assinaturaFileName = `assinatura-${Date.now()}-${limparNomeArquivo(formData.nome_titular)}.png`;
+const assinaturaPath = `${usuarioLogado.id}/${assinaturaFileName}`;
+
+const { error: assinaturaUploadError } = await supabaseClient.storage
+  .from("termos-portabilidade")
+  .upload(assinaturaPath, assinaturaBlob, {
+    contentType: "image/png",
+    upsert: false
+  });
+
+if (assinaturaUploadError) throw assinaturaUploadError;
+
+const { data: assinaturaPublicData } = supabaseClient.storage
+  .from("termos-portabilidade")
+  .getPublicUrl(assinaturaPath);
+
+assinaturaUrl = assinaturaPublicData.publicUrl;
+
+       const payload = {
+  nome_titular: formData.nome_titular,
+  cpf_cnpj: formData.cpf_cnpj,
+  endereco: formData.endereco,
+  cidade: formData.cidade,
+  estado: formData.estado,
+  numero_linha: formData.numero_linha,
+  operadora_atual: formData.operadora_atual,
+  data_prevista_portabilidade: formData.data_prevista_portabilidade,
+  plano_contratado: formData.plano_contratado || null,
+  anexo_fatura_url: anexoUrl,
+  anexo_fatura_nome: anexoNome,
+  termo_aceito: true,
+  termo_pdf_url: termoPdfUrl,
+  termo_pdf_nome: termoPdfNome,
+  assinatura_url: assinaturaUrl,
+  assinado_em: new Date().toISOString(),
+  termo_versao: "v1-2026",
+  status: "Dados recebidos",
+  atendente_id: usuarioLogado.id,
+  atendente_nome: usuarioLogado.nome
+};
 
         const { data, error } = await supabaseClient
           .from("portabilidades")
@@ -1187,7 +1443,17 @@ if (view === "usuarios") carregarUsuarios();
     }
 
     function novaSolicitacao() {
-      Object.keys(formData).forEach(k => formData[k] = k === "anexoFile" ? null : "");
+      Object.keys(formData).forEach(k => {
+  if (k === "anexoFile" || k === "assinaturaDataUrl") {
+    formData[k] = null;
+  } else if (k === "termo_aceito") {
+    formData[k] = false;
+  } else {
+    formData[k] = "";
+  }
+});
+
+assinaturaDesenhada = false;
       currentStep = 0;
       renderStep();
       showView("nova");
@@ -1431,6 +1697,7 @@ Status: ${dados.status || "Dados recebidos"}`;
             <div class="actions">
               <button class="btn btn-light" onclick='abrirModalPortabilidade(${JSON.stringify(item)})'>Editar</button>
               <button class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(item)})'>PDF</button>
+              ${item.termo_pdf_url ? `<a class="btn btn-green" href="${item.termo_pdf_url}" target="_blank">Termo</a>` : ""}
             </div>
           </td>
         </tr>
@@ -1438,79 +1705,142 @@ Status: ${dados.status || "Dados recebidos"}`;
     }
 
     function abrirModalPortabilidade(item) {
-      document.getElementById("modalTitle").textContent = "Editar portabilidade";
+  document.getElementById("modalTitle").textContent = "Editar portabilidade";
 
-      document.getElementById("modalContent").innerHTML = `
-        <div class="grid grid-2">
-          <div class="form-group">
-            <label>Nome do titular *</label>
-            <input id="edit_nome_titular" value="${escapeAttr(item.nome_titular)}">
-          </div>
+  document.getElementById("modalContent").innerHTML = `
+    <div class="grid grid-2">
+      <div class="form-group">
+        <label>Nome do titular *</label>
+        <input id="edit_nome_titular" value="${escapeAttr(item.nome_titular)}">
+      </div>
 
-          <div class="form-group">
-            <label>CPF/CNPJ *</label>
-            <input id="edit_cpf_cnpj" value="${escapeAttr(item.cpf_cnpj)}" oninput="mascaraCpfCnpj(this)">
-          </div>
+      <div class="form-group">
+        <label>CPF/CNPJ *</label>
+        <input id="edit_cpf_cnpj" value="${escapeAttr(item.cpf_cnpj)}" oninput="mascaraCpfCnpj(this)">
+      </div>
 
-          <div class="form-group">
-            <label>Cidade *</label>
-            <input id="edit_cidade" value="${escapeAttr(item.cidade)}">
-          </div>
+      <div class="form-group">
+        <label>Endereço *</label>
+        <input id="edit_endereco" value="${escapeAttr(item.endereco || "")}">
+      </div>
 
-          <div class="form-group">
-            <label>Número da linha *</label>
-            <input id="edit_numero_linha" value="${escapeAttr(item.numero_linha)}" oninput="mascaraTelefone(this)">
-          </div>
+      <div class="form-group">
+        <label>Cidade *</label>
+        <input id="edit_cidade" value="${escapeAttr(item.cidade)}">
+      </div>
 
-          <div class="form-group">
-            <label>Plano contratado</label>
-            <input id="edit_plano_contratado" value="${escapeAttr(item.plano_contratado || "")}">
-          </div>
+      <div class="form-group">
+        <label>Estado *</label>
+        <input id="edit_estado" value="${escapeAttr(item.estado || "")}">
+      </div>
 
-          <div class="form-group">
-            <label>Status</label>
-            <select id="edit_status">
-              <option ${item.status === "Dados recebidos" ? "selected" : ""}>Dados recebidos</option>
-              <option ${item.status === "Enviado para portabilidade" ? "selected" : ""}>Enviado para portabilidade</option>
-              <option ${item.status === "Portabilidade concluída" ? "selected" : ""}>Portabilidade concluída</option>
-              <option ${item.status === "Erro" ? "selected" : ""}>Erro</option>
-            </select>
-          </div>
-        </div>
+      <div class="form-group">
+        <label>Número da linha *</label>
+        <input id="edit_numero_linha" value="${escapeAttr(item.numero_linha)}" oninput="mascaraTelefone(this)">
+      </div>
 
-        ${item.anexo_fatura_url ? `
-          <div class="card">
-            <strong>Anexo:</strong>
-            <a href="${item.anexo_fatura_url}" target="_blank">${escapeHTML(item.anexo_fatura_nome || "Abrir fatura")}</a>
-          </div>
-        ` : `<p class="small">Nenhuma fatura anexada.</p>`}
+      <div class="form-group">
+        <label>Operadora atual *</label>
+        <input id="edit_operadora_atual" value="${escapeAttr(item.operadora_atual || "")}">
+      </div>
 
-        <div class="actions">
-          <button class="btn btn-green" onclick="salvarPortabilidade('${item.id}')">Salvar alterações</button>
-          <button class="btn btn-light" onclick='copiarTexto(${JSON.stringify(item)})'>Copiar resumo</button>
-          <button class="btn btn-primary" onclick='notificarNOC(${JSON.stringify(item)})'>Notificar NOC</button>
-        </div>
+      <div class="form-group">
+        <label>Data prevista da portabilidade *</label>
+        <input id="edit_data_prevista_portabilidade" type="date" value="${escapeAttr(item.data_prevista_portabilidade || "")}">
+      </div>
 
-        <div id="editMsg"></div>
-      `;
+      <div class="form-group">
+        <label>Plano contratado</label>
+        <input id="edit_plano_contratado" value="${escapeAttr(item.plano_contratado || "")}">
+      </div>
 
-      abrirModal();
-    }
+      <div class="form-group">
+        <label>Status</label>
+        <select id="edit_status">
+          <option ${item.status === "Dados recebidos" ? "selected" : ""}>Dados recebidos</option>
+          <option ${item.status === "Enviado para portabilidade" ? "selected" : ""}>Enviado para portabilidade</option>
+          <option ${item.status === "Portabilidade concluída" ? "selected" : ""}>Portabilidade concluída</option>
+          <option ${item.status === "Erro" ? "selected" : ""}>Erro</option>
+        </select>
+      </div>
+    </div>
 
-    async function salvarPortabilidade(id) {
-      const payload = {
-        nome_titular: document.getElementById("edit_nome_titular").value.trim(),
-        cpf_cnpj: document.getElementById("edit_cpf_cnpj").value.trim(),
-        cidade: document.getElementById("edit_cidade").value.trim(),
-        numero_linha: document.getElementById("edit_numero_linha").value.trim(),
-        plano_contratado: document.getElementById("edit_plano_contratado").value.trim() || null,
-        status: document.getElementById("edit_status").value
-      };
+    ${item.anexo_fatura_url ? `
+      <div class="card">
+        <strong>Anexo:</strong>
+        <a href="${item.anexo_fatura_url}" target="_blank">${escapeHTML(item.anexo_fatura_nome || "Abrir fatura")}</a>
+      </div>
+    ` : `<p class="small">Nenhuma fatura anexada.</p>`}
 
-      if (!payload.nome_titular || !payload.cpf_cnpj || !payload.cidade || !payload.numero_linha) {
-        document.getElementById("editMsg").innerHTML = `<div class="msg error">Preencha todos os campos obrigatórios.</div>`;
-        return;
-      }
+    ${item.termo_pdf_url ? `
+      <div class="card">
+        <strong>Termo assinado:</strong>
+        <a href="${item.termo_pdf_url}" target="_blank">${escapeHTML(item.termo_pdf_nome || "Abrir termo assinado")}</a>
+      </div>
+    ` : `<p class="small">Termo assinado não encontrado.</p>`}
+
+    <div class="actions">
+      <button class="btn btn-green" onclick="salvarPortabilidade('${item.id}')">Salvar alterações</button>
+      <button class="btn btn-light" onclick='copiarTexto(${JSON.stringify(item)})'>Copiar resumo</button>
+      <button class="btn btn-primary" onclick='notificarNOC(${JSON.stringify(item)})'>Notificar NOC</button>
+    </div>
+
+    <div id="editMsg"></div>
+  `;
+
+  abrirModal();
+}
+
+  async function salvarPortabilidade(id) {
+  const payload = {
+    nome_titular: document.getElementById("edit_nome_titular").value.trim(),
+    cpf_cnpj: document.getElementById("edit_cpf_cnpj").value.trim(),
+    endereco: document.getElementById("edit_endereco").value.trim(),
+    cidade: document.getElementById("edit_cidade").value.trim(),
+    estado: document.getElementById("edit_estado").value.trim(),
+    numero_linha: document.getElementById("edit_numero_linha").value.trim(),
+    operadora_atual: document.getElementById("edit_operadora_atual").value.trim(),
+    data_prevista_portabilidade: document.getElementById("edit_data_prevista_portabilidade").value || null,
+    plano_contratado: document.getElementById("edit_plano_contratado").value.trim() || null,
+    status: document.getElementById("edit_status").value
+  };
+
+  if (
+    !payload.nome_titular ||
+    !payload.cpf_cnpj ||
+    !payload.endereco ||
+    !payload.cidade ||
+    !payload.estado ||
+    !payload.numero_linha ||
+    !payload.operadora_atual ||
+    !payload.data_prevista_portabilidade
+  ) {
+    document.getElementById("editMsg").innerHTML = `
+      <div class="msg error">Preencha todos os campos obrigatórios.</div>
+    `;
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("portabilidades")
+    .update(payload)
+    .eq("id", id);
+
+  if (error) {
+    document.getElementById("editMsg").innerHTML = `
+      <div class="msg error">Erro ao salvar.</div>
+    `;
+    return;
+  }
+
+  document.getElementById("editMsg").innerHTML = `
+    <div class="msg success">Alterações salvas.</div>
+  `;
+
+  await carregarRecebidas();
+  await carregarHistorico();
+  await carregarDashboard();
+}
 
       const { error } = await supabaseClient
         .from("portabilidades")
@@ -1733,13 +2063,14 @@ async function carregarRecebidas() {
           <option value="Erro">Erro</option>
         </select>
       </td>
-      <td>
-        <div class="actions">
-          <button class="btn btn-light" onclick='abrirModalPortabilidade(${JSON.stringify(item)})'>Ver/Editar</button>
-          <button class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(item)})'>PDF</button>
-          <button class="btn btn-green" onclick='notificarNOC(${JSON.stringify(item)})'>Notificar</button>
-        </div>
-      </td>
+     <td>
+  <div class="actions">
+    <button class="btn btn-light" onclick='abrirModalPortabilidade(${JSON.stringify(item)})'>Ver/Editar</button>
+    <button class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(item)})'>PDF</button>
+    ${item.termo_pdf_url ? `<a class="btn btn-green" href="${item.termo_pdf_url}" target="_blank">Termo</a>` : ""}
+    <button class="btn btn-green" onclick='notificarNOC(${JSON.stringify(item)})'>Notificar</button>
+  </div>
+</td>
     </tr>
   `).join("");
 }
@@ -1758,6 +2089,287 @@ async function alterarStatusRecebida(id, novoStatus) {
   await carregarRecebidas();
   await carregarHistorico();
   await carregarDashboard();
+}
+
+    function renderTermoHTML() {
+  const hoje = new Date().toLocaleDateString("pt-BR");
+
+  return `
+    <div class="termo-box">
+      <h3>TERMO DE SOLICITAÇÃO DE PORTABILIDADE – TELEFONIA FIXA</h3>
+
+      <h4>DADOS DO SOLICITANTE</h4>
+      <div class="termo-dados">
+        <p><strong>Nome completo:</strong> ${escapeHTML(formData.nome_titular)}</p>
+        <p><strong>CPF/CNPJ:</strong> ${escapeHTML(formData.cpf_cnpj)}</p>
+        <p><strong>Endereço:</strong> ${escapeHTML(formData.endereco)}</p>
+        <p><strong>Cidade/Estado:</strong> ${escapeHTML(formData.cidade)}/${escapeHTML(formData.estado)}</p>
+      </div>
+
+      <h4>DADOS DA LINHA</h4>
+      <div class="termo-dados">
+        <p><strong>Número a ser portado:</strong> ${escapeHTML(formData.numero_linha)}</p>
+        <p><strong>Operadora atual:</strong> ${escapeHTML(formData.operadora_atual)}</p>
+        <p><strong>Data prevista da portabilidade:</strong> ${formatDateOnly(formData.data_prevista_portabilidade)}</p>
+      </div>
+
+      <h4>DADOS DA PRESTADORA</h4>
+      <div class="termo-dados">
+        <p><strong>Empresa:</strong> VIATEC TELECOMUNICAÇÕES LTDA</p>
+        <p><strong>CNPJ:</strong> 10.356.869/0001-27</p>
+      </div>
+
+      <p><strong>1. SOLICITAÇÃO E AUTORIZAÇÃO</strong></p>
+      <p>O solicitante autoriza a portabilidade do número informado para a prestadora acima, conforme regulamentação da Anatel.</p>
+
+      <p><strong>2. CIÊNCIA DO PROCESSO</strong></p>
+      <p>Declara estar ciente de que a linha será cancelada na operadora atual, podendo haver interrupção temporária do serviço. Créditos e benefícios não serão transferidos. Pendências com a operadora anterior são de responsabilidade do solicitante.</p>
+
+      <p><strong>3. PRAZOS E CANCELAMENTO</strong></p>
+      <p>O solicitante pode cancelar a solicitação em até 2 dias úteis após a assinatura. Após esse prazo, a portabilidade poderá ser concluída.</p>
+
+      <p><strong>4. CONCLUSÃO</strong></p>
+      <p>Após concluída, a linha será ativada na nova operadora e desativada na anterior.</p>
+
+      <p><strong>5. DISPOSIÇÕES GERAIS</strong></p>
+      <p>A portabilidade não implica fidelidade automática, sendo qualquer vínculo sujeito a contrato específico.</p>
+
+      <p><strong>Local e data:</strong> ${escapeHTML(formData.cidade)}/${escapeHTML(formData.estado)}, ${hoje}</p>
+
+      <div class="signature-area">
+        <label>Assinatura do solicitante *</label>
+        <canvas id="signatureCanvas"></canvas>
+        <div class="signature-line">Assinatura do solicitante</div>
+
+        <div class="actions">
+          <button type="button" class="btn btn-light" onclick="limparAssinatura()">Limpar assinatura</button>
+          <button type="button" class="btn btn-primary" onclick="baixarTermoPDF()">Gerar PDF do termo</button>
+        </div>
+
+        <p class="small">O cliente pode assinar usando mouse, touchpad ou dedo no celular/tablet.</p>
+      </div>
+    </div>
+  `;
+}
+
+function setupAssinaturaCanvas() {
+  const canvas = document.getElementById("signatureCanvas");
+  if (!canvas) return;
+
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * window.devicePixelRatio;
+  canvas.height = rect.height * window.devicePixelRatio;
+
+  const ctx = canvas.getContext("2d");
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  ctx.lineWidth = 2;
+  ctx.lineCap = "round";
+  ctx.strokeStyle = "#172033";
+
+  let desenhando = false;
+
+  if (formData.assinaturaDataUrl) {
+    const img = new Image();
+    img.onload = function () {
+      ctx.drawImage(img, 0, 0, rect.width, rect.height);
+    };
+    img.src = formData.assinaturaDataUrl;
+    assinaturaDesenhada = true;
+  }
+
+  function getPos(e) {
+    const r = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    return {
+      x: clientX - r.left,
+      y: clientY - r.top
+    };
+  }
+
+  function start(e) {
+    e.preventDefault();
+    desenhando = true;
+    assinaturaDesenhada = true;
+    const pos = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  }
+
+  function move(e) {
+    if (!desenhando) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+  }
+
+  function end(e) {
+    if (!desenhando) return;
+    e.preventDefault();
+    desenhando = false;
+    salvarAssinaturaAtual();
+  }
+
+  canvas.addEventListener("mousedown", start);
+  canvas.addEventListener("mousemove", move);
+  canvas.addEventListener("mouseup", end);
+  canvas.addEventListener("mouseleave", end);
+
+  canvas.addEventListener("touchstart", start, { passive: false });
+  canvas.addEventListener("touchmove", move, { passive: false });
+  canvas.addEventListener("touchend", end, { passive: false });
+}
+
+function salvarAssinaturaAtual() {
+  const canvas = document.getElementById("signatureCanvas");
+  if (!canvas) return;
+
+  if (assinaturaDesenhada) {
+    formData.assinaturaDataUrl = canvas.toDataURL("image/png");
+    formData.termo_aceito = true;
+  }
+}
+
+function limparAssinatura() {
+  const canvas = document.getElementById("signatureCanvas");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  assinaturaDesenhada = false;
+  formData.assinaturaDataUrl = null;
+  formData.termo_aceito = false;
+}
+
+function baixarTermoPDF() {
+  salvarAssinaturaAtual();
+
+  if (!formData.assinaturaDataUrl) {
+    alert("O cliente precisa assinar antes de gerar o PDF.");
+    return;
+  }
+
+  gerarTermoPDFBlob(true);
+}
+
+function gerarTermoPDFBlob(download = false) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const margem = 15;
+  let y = 18;
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(15);
+  doc.text("TERMO DE SOLICITAÇÃO DE PORTABILIDADE – TELEFONIA FIXA", margem, y);
+
+  y += 12;
+
+  doc.setFontSize(11);
+  doc.text("DADOS DO SOLICITANTE", margem, y);
+  y += 8;
+
+  doc.setFont("helvetica", "normal");
+  doc.text(`Nome completo: ${formData.nome_titular}`, margem, y); y += 7;
+  doc.text(`CPF/CNPJ: ${formData.cpf_cnpj}`, margem, y); y += 7;
+  doc.text(`Endereço: ${formData.endereco}`, margem, y); y += 7;
+  doc.text(`Cidade/Estado: ${formData.cidade}/${formData.estado}`, margem, y); y += 10;
+
+  doc.setFont("helvetica", "bold");
+  doc.text("DADOS DA LINHA", margem, y);
+  y += 8;
+
+  doc.setFont("helvetica", "normal");
+  doc.text(`Número a ser portado: ${formData.numero_linha}`, margem, y); y += 7;
+  doc.text(`Operadora atual: ${formData.operadora_atual}`, margem, y); y += 7;
+  doc.text(`Data prevista da portabilidade: ${formatDateOnly(formData.data_prevista_portabilidade)}`, margem, y); y += 10;
+
+  doc.setFont("helvetica", "bold");
+  doc.text("DADOS DA PRESTADORA", margem, y);
+  y += 8;
+
+  doc.setFont("helvetica", "normal");
+  doc.text("Empresa: VIATEC TELECOMUNICAÇÕES LTDA", margem, y); y += 7;
+  doc.text("CNPJ: 10.356.869/0001-27", margem, y); y += 10;
+
+  const paragrafos = [
+    ["1. SOLICITAÇÃO E AUTORIZAÇÃO", "O solicitante autoriza a portabilidade do número informado para a prestadora acima, conforme regulamentação da Anatel."],
+    ["2. CIÊNCIA DO PROCESSO", "Declara estar ciente de que a linha será cancelada na operadora atual, podendo haver interrupção temporária do serviço. Créditos e benefícios não serão transferidos. Pendências com a operadora anterior são de responsabilidade do solicitante."],
+    ["3. PRAZOS E CANCELAMENTO", "O solicitante pode cancelar a solicitação em até 2 dias úteis após a assinatura. Após esse prazo, a portabilidade poderá ser concluída."],
+    ["4. CONCLUSÃO", "Após concluída, a linha será ativada na nova operadora e desativada na anterior."],
+    ["5. DISPOSIÇÕES GERAIS", "A portabilidade não implica fidelidade automática, sendo qualquer vínculo sujeito a contrato específico."]
+  ];
+
+  paragrafos.forEach(([titulo, texto]) => {
+    doc.setFont("helvetica", "bold");
+    doc.text(titulo, margem, y);
+    y += 6;
+
+    doc.setFont("helvetica", "normal");
+    const linhas = doc.splitTextToSize(texto, 180);
+    doc.text(linhas, margem, y);
+    y += linhas.length * 6 + 5;
+  });
+
+  const hoje = new Date().toLocaleDateString("pt-BR");
+
+  doc.text(`Local e data: ${formData.cidade}/${formData.estado}, ${hoje}`, margem, y);
+  y += 12;
+
+  doc.setFont("helvetica", "bold");
+  doc.text("Assinatura do solicitante:", margem, y);
+  y += 5;
+
+  if (formData.assinaturaDataUrl) {
+    doc.addImage(formData.assinaturaDataUrl, "PNG", margem, y, 80, 35);
+    y += 40;
+  }
+
+  doc.setFont("helvetica", "normal");
+  doc.line(margem, y, margem + 90, y);
+  y += 6;
+  doc.text(formData.nome_titular || "Solicitante", margem, y);
+
+  y += 10;
+  doc.setFontSize(9);
+  doc.text(`Assinado eletronicamente no sistema Portabilidade ViaTec em ${new Date().toLocaleString("pt-BR")}.`, margem, y);
+  y += 5;
+  doc.text(`Atendente responsável: ${usuarioLogado?.nome || ""}`, margem, y);
+  y += 5;
+  doc.text("Versão do termo: v1-2026", margem, y);
+
+  if (download) {
+    doc.save(`termo-portabilidade-${limparNomeArquivo(formData.nome_titular)}.pdf`);
+  }
+
+  return doc.output("blob");
+}
+
+function dataURLtoBlob(dataURL) {
+  const parts = dataURL.split(",");
+  const mime = parts[0].match(/:(.*?);/)[1];
+  const binary = atob(parts[1]);
+  const array = [];
+
+  for (let i = 0; i < binary.length; i++) {
+    array.push(binary.charCodeAt(i));
+  }
+
+  return new Blob([new Uint8Array(array)], { type: mime });
+}
+
+function formatDateOnly(dateString) {
+  if (!dateString) return "-";
+
+  const parts = String(dateString).split("-");
+  if (parts.length === 3) {
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  }
+
+  return dateString;
 }
     
     function statusBadge(status) {
