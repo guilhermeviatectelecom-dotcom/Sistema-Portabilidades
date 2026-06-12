@@ -1263,48 +1263,40 @@ Status: ${dados.status || "Dados recebidos"}`;
       document.getElementById("wizardMsg").innerHTML = "";
     }
 
-    function saveCurrentStep() {
-      const step = steps[currentStep];
+ function saveCurrentStep() {
+  const step = steps[currentStep];
 
-if (step.field === "resumo") return true;
+  if (step.field === "resumo") return true;
 
-if (step.field === "termo") {
-  salvarAssinaturaAtual();
+  if (step.field === "termo") {
+    salvarAssinaturaAtual();
 
-  if (!formData.assinaturaDataUrl) {
-    showWizardError("O cliente precisa assinar o termo para continuar.");
+    if (!formData.assinaturaDataUrl) {
+      showWizardError("O cliente precisa assinar o termo para continuar.");
+      return false;
+    }
+
+    formData.termo_aceito = true;
+    return true;
+  }
+
+  if (step.field === "anexoFile") {
+    const fileInput = document.getElementById("anexoFile");
+    formData.anexoFile = fileInput.files[0] || formData.anexoFile || null;
+    return true;
+  }
+
+  const input = document.getElementById(step.field);
+  const value = input ? input.value.trim() : "";
+
+  if (step.required && !value) {
+    showWizardError("Preencha este campo para continuar.");
     return false;
   }
 
-  formData.termo_aceito = true;
+  formData[step.field] = value;
   return true;
 }
-
-      if (step.field === "anexoFile") {
-        const fileInput = document.getElementById("anexoFile");
-        formData.anexoFile = fileInput.files[0] || formData.anexoFile || null;
-        return true;
-      }
-
-      const input = document.getElementById(step.field);
-      const value = input ? input.value.trim() : "";
-
-      if (step.required && !value) {
-        showWizardError("Preencha este campo para continuar.");
-        return false;
-      }
-
-      formData[step.field] = value;
-      return true;
-    }
-
-    function nextStep() {
-      if (!saveCurrentStep()) return;
-      if (currentStep < steps.length - 1) {
-        currentStep++;
-        renderStep();
-      }
-    }
 
     function prevStep() {
       saveCurrentStep();
