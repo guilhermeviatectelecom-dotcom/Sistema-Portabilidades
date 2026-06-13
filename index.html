@@ -1780,6 +1780,11 @@ Status: ${dados.status || "Dados recebidos"}`;
           <option ${item.status === "Erro" ? "selected" : ""}>Erro</option>
         </select>
       </div>
+
+      <div class="form-group" style="grid-column: 1 / -1;">
+  <label>Observação interna</label>
+  <textarea id="edit_observacao" rows="4" placeholder="Digite observações internas sobre esta portabilidade...">${escapeHTML(item.observacao || "")}</textarea>
+</div>
     </div>
 
     ${item.anexo_fatura_url ? `
@@ -1810,17 +1815,18 @@ Status: ${dados.status || "Dados recebidos"}`;
 
   async function salvarPortabilidade(id) {
   const payload = {
-    nome_titular: document.getElementById("edit_nome_titular").value.trim(),
-    cpf_cnpj: document.getElementById("edit_cpf_cnpj").value.trim(),
-    endereco: document.getElementById("edit_endereco").value.trim(),
-    cidade: document.getElementById("edit_cidade").value.trim(),
-    estado: document.getElementById("edit_estado").value.trim(),
-    numero_linha: document.getElementById("edit_numero_linha").value.trim(),
-    operadora_atual: document.getElementById("edit_operadora_atual").value.trim(),
-    data_prevista_portabilidade: document.getElementById("edit_data_prevista_portabilidade").value || null,
-    plano_contratado: document.getElementById("edit_plano_contratado").value.trim() || null,
-    status: document.getElementById("edit_status").value
-  };
+  nome_titular: document.getElementById("edit_nome_titular").value.trim(),
+  cpf_cnpj: document.getElementById("edit_cpf_cnpj").value.trim(),
+  endereco: document.getElementById("edit_endereco").value.trim(),
+  cidade: document.getElementById("edit_cidade").value.trim(),
+  estado: document.getElementById("edit_estado").value.trim(),
+  numero_linha: document.getElementById("edit_numero_linha").value.trim(),
+  operadora_atual: document.getElementById("edit_operadora_atual").value.trim(),
+  data_prevista_portabilidade: document.getElementById("edit_data_prevista_portabilidade").value || null,
+  plano_contratado: document.getElementById("edit_plano_contratado").value.trim() || null,
+  observacao: document.getElementById("edit_observacao").value.trim() || null,
+  status: document.getElementById("edit_status").value
+};
 
   if (
     !payload.nome_titular ||
