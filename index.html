@@ -570,10 +570,27 @@
       font-size: 14px;
     }
 
-    @media (max-width: 920px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
+  @media (max-width: 920px) {
+  .sidebar {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
+  }
+
+  .menu {
+    margin-bottom: 20px !important;
+  }
+
+  .logout {
+    margin-top: auto !important;
+    margin-bottom: 18px !important;
+    width: 100% !important;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
 
       .sidebar {
         position: relative;
