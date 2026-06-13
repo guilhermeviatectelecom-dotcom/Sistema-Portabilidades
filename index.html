@@ -690,6 +690,20 @@
   color: #991b1b;
   border-color: #fecaca;
 }
+
+    .obs-cell {
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #344054;
+  font-size: 13px;
+}
+
+.obs-empty {
+  color: #98a2b3;
+  font-style: italic;
+}
     
   </style>
 </head>
@@ -824,9 +838,10 @@
             <th>CPF/CNPJ</th>
             <th>Número</th>
             <th>Cidade</th>
-            <th>Plano</th>
-            <th>Atendente</th>
-            <th>Status</th>
+           <th>Plano</th>
+           <th>Atendente</th>
+            <th>Observação</th>
+           <th>Status</th>
             <th>Ações</th>
           </tr>
         </thead>
@@ -887,12 +902,13 @@
                 <thead>
                   <tr>
                     <th>Data</th>
-                    <th>Cliente</th>
-                    <th>Número</th>
-                    <th>Cidade</th>
-                    <th>Status</th>
-                    <th>Atendente</th>
-                    <th>Ações</th>
+<th>Cliente</th>
+<th>Número</th>
+<th>Cidade</th>
+<th>Status</th>
+<th>Atendente</th>
+<th>Observação</th>
+<th>Ações</th>
                   </tr>
                 </thead>
                 <tbody id="historicoTabela"></tbody>
@@ -1651,7 +1667,7 @@ Status: ${dados.status || "Dados recebidos"}`;
         .order("criado_em", { ascending: false });
 
       if (error) {
-        document.getElementById("historicoTabela").innerHTML = `<tr><td colspan="7">Erro ao carregar histórico.</td></tr>`;
+        document.getElementById("historicoTabela").innerHTML = `<tr><td colspan="8">Erro ao carregar histórico.</td></tr>`;
         return;
       }
 
@@ -1709,9 +1725,15 @@ Status: ${dados.status || "Dados recebidos"}`;
           <td>${escapeHTML(item.numero_linha)}</td>
           <td>${escapeHTML(item.cidade)}</td>
           <td>${statusBadge(item.status)}</td>
-          <td>${escapeHTML(item.atendente_nome || "-")}</td>
-          <td>
-            <div class="actions">
+<td>${escapeHTML(item.atendente_nome || "-")}</td>
+<td>
+  ${item.observacao 
+    ? `<div class="obs-cell" title="${escapeAttr(item.observacao)}">${escapeHTML(item.observacao)}</div>` 
+    : `<span class="obs-empty">Sem observação</span>`
+  }
+</td>
+<td>
+  <div class="actions">
               <button class="btn btn-light" onclick='abrirModalPortabilidade(${JSON.stringify(item)})'>Editar</button>
               <button class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(item)})'>PDF</button>
               ${item.termo_pdf_url ? `<a class="btn btn-green" href="${item.termo_pdf_url}" target="_blank">Termo</a>` : ""}
@@ -2045,12 +2067,12 @@ async function carregarRecebidas() {
   const tbody = document.getElementById("recebidasTabela");
 
   if (error) {
-    tbody.innerHTML = `<tr><td colspan="9">Erro ao carregar solicitações recebidas.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="10">Erro ao carregar solicitações recebidas.</td></tr>`;
     return;
   }
 
   if (!data || data.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="9">Nenhuma portabilidade em andamento no momento.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="10">Nenhuma portabilidade em andamento no momento.</td></tr>`;
     return;
   }
 
@@ -2061,10 +2083,16 @@ async function carregarRecebidas() {
       <td>${escapeHTML(item.cpf_cnpj)}</td>
       <td>${escapeHTML(item.numero_linha)}</td>
       <td>${escapeHTML(item.cidade)}</td>
-      <td>${escapeHTML(item.plano_contratado || "Não informado")}</td>
-      <td>${escapeHTML(item.atendente_nome || "-")}</td>
-      <td>
-       <select 
+     <td>${escapeHTML(item.plano_contratado || "Não informado")}</td>
+<td>${escapeHTML(item.atendente_nome || "-")}</td>
+<td>
+  ${item.observacao 
+    ? `<div class="obs-cell" title="${escapeAttr(item.observacao)}">${escapeHTML(item.observacao)}</div>` 
+    : `<span class="obs-empty">Sem observação</span>`
+  }
+</td>
+<td>
+  <select
   class="status-select ${statusClass(item.status)}"
   onchange="alterarStatusRecebida('${item.id}', this.value)"
 >
