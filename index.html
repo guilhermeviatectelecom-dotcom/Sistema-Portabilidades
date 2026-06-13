@@ -659,39 +659,329 @@
     grid-template-columns: 1fr;
   }
 }
-    .status-select {
-  border-radius: 999px;
-  font-weight: 900;
-  padding: 8px 12px;
-  border: 1px solid transparent;
-  min-width: 190px;
+    
+
+/* =========================================================
+   MELHORIA VISUAL GERAL - VIATEC
+   ========================================================= */
+.brand {
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.brand img {
+  width: 104px !important;
+  height: 104px !important;
+  object-fit: contain !important;
+  border-radius: 20px !important;
+  background: #fff !important;
+  padding: 8px !important;
+  box-shadow: 0 10px 28px rgba(15, 35, 80, 0.12);
+}
+
+.brand h1 {
+  font-size: 28px !important;
+  letter-spacing: -0.03em;
+}
+
+.login-card {
+  max-width: 460px !important;
+  padding: 38px !important;
+  border-radius: 32px !important;
+  box-shadow: 0 28px 70px rgba(15, 35, 80, 0.16) !important;
+}
+
+.sidebar {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%) !important;
+  box-shadow: 10px 0 32px rgba(15, 35, 80, 0.06);
+}
+
+.sidebar-logo {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin-bottom: 28px !important;
+  padding: 14px !important;
+  border-radius: 22px !important;
+  background: linear-gradient(135deg, #eef4ff, #ffffff) !important;
+  border: 1px solid #dbe7ff !important;
+}
+
+.sidebar-logo img {
+  width: 78px !important;
+  height: 78px !important;
+  object-fit: contain !important;
+  border-radius: 18px !important;
+  background: #fff !important;
+  padding: 6px !important;
+  box-shadow: 0 8px 22px rgba(15, 35, 80, 0.12);
+}
+
+.sidebar-logo strong {
+  font-size: 20px !important;
+  letter-spacing: -0.02em;
+}
+
+.user-box {
+  border-radius: 20px !important;
+  padding: 16px !important;
+  background: linear-gradient(135deg, #f5f8ff, #ffffff) !important;
+}
+
+.menu {
+  gap: 10px !important;
+}
+
+.menu button {
+  width: 100% !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  color: #344054 !important;
+  text-align: left !important;
+  padding: 14px 15px !important;
+  border-radius: 16px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  transition: 0.18s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.menu button.active,
+.menu button:hover {
+  background: linear-gradient(135deg, #eef4ff, #ffffff) !important;
+  color: var(--azul-escuro) !important;
+  border-color: #dbe7ff !important;
+  box-shadow: 0 8px 20px rgba(15, 111, 255, 0.08) !important;
+}
+
+.btn {
+  border: none !important;
+  border-radius: 14px !important;
+  padding: 12px 16px !important;
+  font-weight: 850 !important;
+  cursor: pointer !important;
+  transition: 0.18s ease !important;
+  font-size: 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  text-decoration: none !important;
+  line-height: 1 !important;
+  min-height: 42px !important;
+  white-space: nowrap !important;
+  box-shadow: 0 6px 16px rgba(15, 35, 80, 0.08) !important;
+}
+
+.btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 10px 22px rgba(15, 35, 80, 0.14) !important;
+}
+
+.btn:active {
+  transform: translateY(0) !important;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0f6fff, #0b55d9) !important;
+}
+
+.btn-green {
+  background: linear-gradient(135deg, #13b981, #0f9f70) !important;
+}
+
+.btn-red {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+}
+
+.btn-dark {
+  background: linear-gradient(135deg, #172033, #0f172a) !important;
+}
+
+.btn-light {
+  background: linear-gradient(135deg, #eef4ff, #ffffff) !important;
+  color: var(--azul-escuro) !important;
+  border: 1px solid #dce8ff !important;
+}
+
+.actions {
+  display: flex !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+  margin-top: 12px !important;
+  align-items: center !important;
+}
+
+td .actions {
+  margin-top: 0 !important;
+  gap: 6px !important;
+}
+
+td .btn {
+  min-height: 34px !important;
+  padding: 8px 10px !important;
+  font-size: 12px !important;
+  border-radius: 10px !important;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border: 1px solid rgba(219, 227, 239, 0.95) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 14px 34px rgba(15, 35, 80, 0.08) !important;
+  padding: 24px !important;
+  margin-bottom: 20px !important;
+}
+
+.topbar h2 {
+  margin: 0 !important;
+  color: var(--azul-escuro) !important;
+  font-size: 32px !important;
+  letter-spacing: -0.04em !important;
+}
+
+.table-wrap {
+  overflow-x: auto !important;
+  border: 1px solid var(--cinza-borda) !important;
+  border-radius: 20px !important;
+  background: #fff !important;
+  box-shadow: 0 8px 24px rgba(15, 35, 80, 0.06) !important;
+}
+
+table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  min-width: 1040px !important;
+}
+
+th {
+  background: #f8fbff !important;
+  color: #344054 !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  padding: 14px 12px !important;
+  border-bottom: 1px solid #e4eaf3 !important;
+}
+
+td {
+  padding: 14px 12px !important;
+  border-bottom: 1px solid #edf1f7 !important;
+  text-align: left !important;
+  font-size: 13px !important;
+  vertical-align: middle !important;
+}
+
+tbody tr {
+  transition: 0.15s ease !important;
+}
+
+tbody tr:hover {
+  background: #f8fbff !important;
+}
+
+input,
+select,
+textarea {
+  border-radius: 15px !important;
+  transition: 0.18s ease !important;
+}
+
+textarea {
+  resize: vertical !important;
+  min-height: 96px !important;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: #b9c7dc !important;
+}
+
+.modal {
+  max-width: 900px !important;
+  border-radius: 28px !important;
+  padding: 28px !important;
+  box-shadow: 0 30px 70px rgba(15, 23, 42, 0.28) !important;
+}
+
+.modal-header {
+  padding-bottom: 14px !important;
+  border-bottom: 1px solid #edf1f7 !important;
+}
+
+.close-btn {
+  color: #334155 !important;
+  border-radius: 14px !important;
+  transition: 0.18s ease !important;
+}
+
+.close-btn:hover {
+  background: #e2e8f0 !important;
+}
+
+.stat {
+  background: linear-gradient(135deg, #ffffff, #f8fbff) !important;
+  border: 1px solid var(--cinza-borda) !important;
+  border-radius: 24px !important;
+  padding: 22px !important;
+  box-shadow: 0 10px 28px rgba(15, 35, 80, 0.07) !important;
+}
+
+.stat span {
+  color: var(--muted) !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+
+.stat strong {
+  display: block !important;
+  font-size: 36px !important;
+  margin-top: 8px !important;
+  color: var(--azul-escuro) !important;
+}
+
+.status-select {
+  border-radius: 999px !important;
+  font-weight: 900 !important;
+  padding: 8px 12px !important;
+  border: 1px solid transparent !important;
+  min-width: 190px !important;
+  font-size: 12px !important;
 }
 
 .status-select.dados {
-  background: #fef9c3;
-  color: #854d0e;
-  border-color: #fde68a;
+  background: #fef9c3 !important;
+  color: #854d0e !important;
+  border-color: #fde68a !important;
 }
 
 .status-select.enviado {
-  background: #dbeafe;
-  color: #1d4ed8;
-  border-color: #bfdbfe;
+  background: #dbeafe !important;
+  color: #1d4ed8 !important;
+  border-color: #bfdbfe !important;
 }
 
 .status-select.concluido {
-  background: #dcfce7;
-  color: #166534;
-  border-color: #bbf7d0;
+  background: #dcfce7 !important;
+  color: #166534 !important;
+  border-color: #bbf7d0 !important;
 }
 
 .status-select.erro {
-  background: #fee2e2;
-  color: #991b1b;
-  border-color: #fecaca;
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+  border-color: #fecaca !important;
 }
 
-    .obs-cell {
+.obs-cell {
   max-width: 260px;
   white-space: nowrap;
   overflow: hidden;
@@ -704,7 +994,159 @@
   color: #98a2b3;
   font-style: italic;
 }
-    
+
+@media (max-width: 920px) {
+  .brand img { width: 86px !important; height: 86px !important; }
+  .topbar h2 { font-size: 26px !important; }
+  .sidebar-logo img { width: 64px !important; height: 64px !important; }
+}
+
+
+/* Filtros compactos - Minhas solicitações */
+.filter-card {
+  background: rgba(255,255,255,0.96);
+  border: 1px solid var(--cinza-borda);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 18px;
+  box-shadow: 0 10px 24px rgba(15, 35, 80, 0.06);
+}
+
+.filter-card.collapsed .filter-body {
+  display: none;
+}
+
+.filter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.filter-head strong {
+  color: var(--azul-escuro);
+  font-size: 16px;
+}
+
+.filter-head span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.filter-body {
+  margin-top: 14px;
+}
+
+.filter-grid-minhas {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr auto auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.mini-count {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
+.request-card .actions .btn {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 920px) {
+  .filter-grid-minhas {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Cards minimizados - Minhas solicitações */
+.minhas-grid {
+  grid-template-columns: 1fr;
+}
+
+.request-card.minha-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.minha-card-head {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 16px;
+  background: linear-gradient(135deg, #ffffff, #f8fbff);
+}
+
+.minha-main-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.minha-main-title strong {
+  color: var(--azul-escuro);
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.minha-main-title span,
+.minha-mini-info {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.minha-card-body {
+  border-top: 1px solid #edf1f7;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+  background: #fff;
+}
+
+.minha-card.collapsed .minha-card-body {
+  display: none;
+}
+
+.minha-details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.minha-detail {
+  background: #f8fbff;
+  border: 1px solid #edf1f7;
+  border-radius: 14px;
+  padding: 10px;
+  font-size: 13px;
+}
+
+.minha-detail strong {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+@media (max-width: 920px) {
+  .minha-card-head {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+  .minha-details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
   </style>
 </head>
 
@@ -756,14 +1198,7 @@
           <span id="userRole">Perfil</span>
         </div>
 
-        <nav class="menu">
-         <button id="menuNova" onclick="showView('nova')">Nova solicitação</button>
-<button id="menuMinhas" onclick="showView('minhas')">Minhas solicitações</button>
-<button id="menuDashboard" class="admin-only" onclick="showView('dashboard')">Dashboard</button>
-<button id="menuRecebidas" class="admin-only" onclick="showView('recebidas')">Em andamento</button>
-<button id="menuHistorico" class="admin-only" onclick="showView('historico')">Histórico geral</button>
-<button id="menuUsuarios" class="admin-only" onclick="showView('usuarios')">Usuários</button>
-        </nav>
+        <nav class="menu" id="menuPrincipal"></nav>
 
         <button class="btn btn-dark logout" onclick="logout()">Sair</button>
       </aside>
@@ -805,7 +1240,40 @@
             <button class="btn btn-light" onclick="carregarMinhasSolicitacoes()">Atualizar</button>
           </div>
 
-          <div id="minhasLista" class="grid grid-2"></div>
+          <div id="filtrosMinhasCard" class="filter-card">
+            <div class="filter-head">
+              <div>
+                <strong>Filtros de busca</strong>
+                <span>Pesquise por cliente, CPF/CNPJ, número, cidade ou filtre por período.</span>
+              </div>
+            </div>
+
+            <div class="filter-body">
+              <div class="filter-grid-minhas">
+                <div class="form-group">
+                  <label>Pesquisar</label>
+                  <input id="minhasBusca" placeholder="Nome, CPF/CNPJ, número ou cidade" oninput="renderMinhasSolicitacoes()">
+                </div>
+
+                <div class="form-group">
+                  <label>Data inicial</label>
+                  <input id="minhasDataInicio" type="date" onchange="renderMinhasSolicitacoes()">
+                </div>
+
+                <div class="form-group">
+                  <label>Data final</label>
+                  <input id="minhasDataFim" type="date" onchange="renderMinhasSolicitacoes()">
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="renderMinhasSolicitacoes()">Filtrar</button>
+                <button type="button" class="btn btn-light" onclick="limparFiltrosMinhas()">Limpar</button>
+              </div>
+
+              <p id="minhasFiltroResumo" class="mini-count"></p>
+            </div>
+          </div>
+
+          <div id="minhasLista" class="grid minhas-grid"></div>
         </section>
 
         <section id="viewDashboard" class="view hidden admin-only">
@@ -838,10 +1306,10 @@
             <th>CPF/CNPJ</th>
             <th>Número</th>
             <th>Cidade</th>
-           <th>Plano</th>
-           <th>Atendente</th>
+            <th>Plano</th>
+            <th>Atendente</th>
             <th>Observação</th>
-           <th>Status</th>
+            <th>Status</th>
             <th>Ações</th>
           </tr>
         </thead>
@@ -902,13 +1370,13 @@
                 <thead>
                   <tr>
                     <th>Data</th>
-<th>Cliente</th>
-<th>Número</th>
-<th>Cidade</th>
-<th>Status</th>
-<th>Atendente</th>
-<th>Observação</th>
-<th>Ações</th>
+                    <th>Cliente</th>
+                    <th>Número</th>
+                    <th>Cidade</th>
+                    <th>Status</th>
+                    <th>Atendente</th>
+                    <th>Observação</th>
+                    <th>Ações</th>
                   </tr>
                 </thead>
                 <tbody id="historicoTabela"></tbody>
@@ -970,6 +1438,7 @@
     let currentStep = 0;
     let historicoCache = [];
     let usuariosCache = [];
+    let minhasCache = [];
 
    const formData = {
   nome_titular: "",
@@ -1187,6 +1656,28 @@ let assinaturaDesenhada = false;
       entrarSistema();
     }
 
+
+    function montarMenu() {
+      const menu = document.getElementById("menuPrincipal");
+      if (!menu || !usuarioLogado) return;
+
+      let botoes = `
+        <button id="menuNova" onclick="showView('nova')">Nova solicitação</button>
+        <button id="menuMinhas" onclick="showView('minhas')">Minhas solicitações</button>
+      `;
+
+      if (usuarioLogado.perfil === "admin") {
+        botoes += `
+          <button id="menuDashboard" onclick="showView('dashboard')">Dashboard</button>
+          <button id="menuRecebidas" onclick="showView('recebidas')">Em andamento</button>
+          <button id="menuHistorico" onclick="showView('historico')">Histórico geral</button>
+          <button id="menuUsuarios" onclick="showView('usuarios')">Usuários</button>
+        `;
+      }
+
+      menu.innerHTML = botoes;
+    }
+
     function entrarSistema() {
       document.getElementById("loginPage").classList.add("hidden");
       document.getElementById("systemPage").classList.remove("hidden");
@@ -1194,8 +1685,22 @@ let assinaturaDesenhada = false;
       document.getElementById("userName").textContent = usuarioLogado.nome;
       document.getElementById("userRole").textContent = usuarioLogado.perfil === "admin" ? "Administrador" : "Atendente";
 
-      document.querySelectorAll(".admin-only").forEach(el => {
-        el.style.display = usuarioLogado.perfil === "admin" ? "" : "none";
+      montarMenu();
+
+      const isAdmin = usuarioLogado.perfil === "admin";
+
+      document.querySelectorAll(".menu .admin-only").forEach(el => {
+        el.classList.toggle("hidden", !isAdmin);
+        el.style.display = isAdmin ? "" : "none";
+      });
+
+      document.querySelectorAll("section.admin-only").forEach(el => {
+        if (isAdmin) {
+          el.style.display = "";
+        } else {
+          el.classList.add("hidden");
+          el.style.display = "none";
+        }
       });
 
      if (usuarioLogado.perfil === "admin") {
@@ -1216,6 +1721,11 @@ let assinaturaDesenhada = false;
     }
 
     function showView(view) {
+      const adminViews = ["dashboard", "recebidas", "historico", "usuarios"];
+      if (usuarioLogado?.perfil !== "admin" && adminViews.includes(view)) {
+        view = "nova";
+      }
+
       document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
       document.querySelectorAll(".menu button").forEach(b => b.classList.remove("active"));
 
@@ -1590,25 +2100,116 @@ Status: ${dados.status || "Dados recebidos"}`;
         return;
       }
 
-      if (!data || data.length === 0) {
+      minhasCache = data || [];
+      renderMinhasSolicitacoes();
+    }
+
+    function renderMinhasSolicitacoes() {
+      const container = document.getElementById("minhasLista");
+      const resumo = document.getElementById("minhasFiltroResumo");
+
+      if (!container) return;
+
+      const busca = (document.getElementById("minhasBusca")?.value || "").toLowerCase().trim();
+      const dataInicio = document.getElementById("minhasDataInicio")?.value || "";
+      const dataFim = document.getElementById("minhasDataFim")?.value || "";
+
+      let lista = [...minhasCache];
+
+      if (busca) {
+        lista = lista.filter(item =>
+          String(item.nome_titular || "").toLowerCase().includes(busca) ||
+          String(item.cpf_cnpj || "").toLowerCase().includes(busca) ||
+          String(item.numero_linha || "").toLowerCase().includes(busca) ||
+          String(item.cidade || "").toLowerCase().includes(busca) ||
+          String(item.status || "").toLowerCase().includes(busca)
+        );
+      }
+
+      if (dataInicio) {
+        lista = lista.filter(item => {
+          const dataItem = new Date(item.criado_em).toISOString().slice(0, 10);
+          return dataItem >= dataInicio;
+        });
+      }
+
+      if (dataFim) {
+        lista = lista.filter(item => {
+          const dataItem = new Date(item.criado_em).toISOString().slice(0, 10);
+          return dataItem <= dataFim;
+        });
+      }
+
+      if (resumo) {
+        resumo.textContent = `Mostrando ${lista.length} de ${minhasCache.length} solicitação(ões).`;
+      }
+
+      if (minhasCache.length === 0) {
         container.innerHTML = `<div class="card">Você ainda não cadastrou nenhuma solicitação.</div>`;
         return;
       }
 
-      container.innerHTML = data.map(item => `
-        <div class="request-card">
-          <h4>${escapeHTML(item.nome_titular)}</h4>
-          <p><strong>Número:</strong> ${escapeHTML(item.numero_linha)}</p>
-          <p><strong>Cidade:</strong> ${escapeHTML(item.cidade)}</p>
-          <p><strong>Data:</strong> ${formatDate(item.criado_em)}</p>
-          <div>${statusBadge(item.status)}</div>
-          <div class="actions">
-            <button class="btn btn-light" onclick='copiarTexto(${JSON.stringify(item)})'>Copiar</button>
-            <button class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(item)})'>PDF</button>
-            <button class="btn btn-green" onclick='notificarNOC(${JSON.stringify(item)})'>Notificar NOC</button>
+      if (lista.length === 0) {
+        container.innerHTML = `<div class="card">Nenhuma solicitação encontrada com os filtros aplicados.</div>`;
+        return;
+      }
+
+      container.innerHTML = lista.map(item => `
+        <div class="request-card minha-card collapsed" id="minha-${item.id}">
+          <div class="minha-card-head">
+            <div class="minha-main-title">
+              <strong title="${escapeAttr(item.nome_titular)}">${escapeHTML(item.nome_titular)}</strong>
+              <span>${escapeHTML(item.numero_linha || "-")}</span>
+            </div>
+            <div class="minha-mini-info"><strong>Data:</strong> ${formatDate(item.criado_em)}</div>
+            <div>${statusBadge(item.status)}</div>
+            <button class="btn btn-light" type="button" onclick="toggleMinhaDetalhe('${item.id}', this)">Ver detalhes</button>
+          </div>
+
+          <div class="minha-card-body">
+            <div class="minha-details-grid">
+              <div class="minha-detail"><strong>CPF/CNPJ</strong>${escapeHTML(item.cpf_cnpj || "-")}</div>
+              <div class="minha-detail"><strong>Cidade/UF</strong>${escapeHTML(item.cidade || "-")}/${escapeHTML(item.estado || "-")}</div>
+              <div class="minha-detail"><strong>Plano</strong>${escapeHTML(item.plano_contratado || "Não informado")}</div>
+              <div class="minha-detail"><strong>Operadora atual</strong>${escapeHTML(item.operadora_atual || "-")}</div>
+              <div class="minha-detail"><strong>Data prevista</strong>${formatDateOnly(item.data_prevista_portabilidade)}</div>
+              <div class="minha-detail"><strong>Termo assinado</strong>${item.termo_aceito ? "Sim" : "Não"}</div>
+            </div>
+
+            <div class="minha-detail">
+              <strong>Observação</strong>
+              ${item.observacao ? escapeHTML(item.observacao) : "Sem observação"}
+            </div>
+
+            <div class="actions">
+              <button class="btn btn-light" onclick='copiarTexto(${JSON.stringify(item)})'>Copiar</button>
+              <button class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(item)})'>PDF</button>
+              ${item.termo_pdf_url ? `<a class="btn btn-green" href="${item.termo_pdf_url}" target="_blank">Termo</a>` : ""}
+              <button class="btn btn-green" onclick='notificarNOC(${JSON.stringify(item)})'>Notificar NOC</button>
+            </div>
           </div>
         </div>
       `).join("");
+    }
+
+    function toggleMinhaDetalhe(id, btn) {
+      const card = document.getElementById("minha-" + id);
+      if (!card) return;
+
+      const fechado = card.classList.toggle("collapsed");
+      if (btn) btn.textContent = fechado ? "Ver detalhes" : "Ocultar detalhes";
+    }
+
+    function limparFiltrosMinhas() {
+      const busca = document.getElementById("minhasBusca");
+      const inicio = document.getElementById("minhasDataInicio");
+      const fim = document.getElementById("minhasDataFim");
+
+      if (busca) busca.value = "";
+      if (inicio) inicio.value = "";
+      if (fim) fim.value = "";
+
+      renderMinhasSolicitacoes();
     }
 
     async function carregarDashboard() {
@@ -1714,7 +2315,7 @@ Status: ${dados.status || "Dados recebidos"}`;
       const tbody = document.getElementById("historicoTabela");
 
       if (lista.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7">Nenhuma solicitação encontrada.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8">Nenhuma solicitação encontrada.</td></tr>`;
         return;
       }
 
@@ -1725,15 +2326,15 @@ Status: ${dados.status || "Dados recebidos"}`;
           <td>${escapeHTML(item.numero_linha)}</td>
           <td>${escapeHTML(item.cidade)}</td>
           <td>${statusBadge(item.status)}</td>
-<td>${escapeHTML(item.atendente_nome || "-")}</td>
-<td>
-  ${item.observacao 
-    ? `<div class="obs-cell" title="${escapeAttr(item.observacao)}">${escapeHTML(item.observacao)}</div>` 
-    : `<span class="obs-empty">Sem observação</span>`
-  }
-</td>
-<td>
-  <div class="actions">
+          <td>${escapeHTML(item.atendente_nome || "-")}</td>
+          <td>
+            ${item.observacao
+              ? `<div class="obs-cell" title="${escapeAttr(item.observacao)}">${escapeHTML(item.observacao)}</div>`
+              : `<span class="obs-empty">Sem observação</span>`
+            }
+          </td>
+          <td>
+            <div class="actions">
               <button class="btn btn-light" onclick='abrirModalPortabilidade(${JSON.stringify(item)})'>Editar</button>
               <button class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(item)})'>PDF</button>
               ${item.termo_pdf_url ? `<a class="btn btn-green" href="${item.termo_pdf_url}" target="_blank">Termo</a>` : ""}
@@ -1804,9 +2405,9 @@ Status: ${dados.status || "Dados recebidos"}`;
       </div>
 
       <div class="form-group" style="grid-column: 1 / -1;">
-  <label>Observação interna</label>
-  <textarea id="edit_observacao" rows="4" placeholder="Digite observações internas sobre esta portabilidade...">${escapeHTML(item.observacao || "")}</textarea>
-</div>
+        <label>Observação interna</label>
+        <textarea id="edit_observacao" rows="4" placeholder="Digite observações internas sobre esta portabilidade...">${escapeHTML(item.observacao || "")}</textarea>
+      </div>
     </div>
 
     ${item.anexo_fatura_url ? `
@@ -1837,18 +2438,18 @@ Status: ${dados.status || "Dados recebidos"}`;
 
   async function salvarPortabilidade(id) {
   const payload = {
-  nome_titular: document.getElementById("edit_nome_titular").value.trim(),
-  cpf_cnpj: document.getElementById("edit_cpf_cnpj").value.trim(),
-  endereco: document.getElementById("edit_endereco").value.trim(),
-  cidade: document.getElementById("edit_cidade").value.trim(),
-  estado: document.getElementById("edit_estado").value.trim(),
-  numero_linha: document.getElementById("edit_numero_linha").value.trim(),
-  operadora_atual: document.getElementById("edit_operadora_atual").value.trim(),
-  data_prevista_portabilidade: document.getElementById("edit_data_prevista_portabilidade").value || null,
-  plano_contratado: document.getElementById("edit_plano_contratado").value.trim() || null,
-  observacao: document.getElementById("edit_observacao").value.trim() || null,
-  status: document.getElementById("edit_status").value
-};
+    nome_titular: document.getElementById("edit_nome_titular").value.trim(),
+    cpf_cnpj: document.getElementById("edit_cpf_cnpj").value.trim(),
+    endereco: document.getElementById("edit_endereco").value.trim(),
+    cidade: document.getElementById("edit_cidade").value.trim(),
+    estado: document.getElementById("edit_estado").value.trim(),
+    numero_linha: document.getElementById("edit_numero_linha").value.trim(),
+    operadora_atual: document.getElementById("edit_operadora_atual").value.trim(),
+    data_prevista_portabilidade: document.getElementById("edit_data_prevista_portabilidade").value || null,
+    plano_contratado: document.getElementById("edit_plano_contratado").value.trim() || null,
+    observacao: document.getElementById("edit_observacao").value.trim() || null,
+    status: document.getElementById("edit_status").value
+  };
 
   if (
     !payload.nome_titular ||
@@ -1885,6 +2486,7 @@ Status: ${dados.status || "Dados recebidos"}`;
   await carregarRecebidas();
   await carregarHistorico();
   await carregarDashboard();
+  await carregarMinhasSolicitacoes();
 }
 
     async function carregarUsuarios() {
@@ -2083,24 +2685,21 @@ async function carregarRecebidas() {
       <td>${escapeHTML(item.cpf_cnpj)}</td>
       <td>${escapeHTML(item.numero_linha)}</td>
       <td>${escapeHTML(item.cidade)}</td>
-     <td>${escapeHTML(item.plano_contratado || "Não informado")}</td>
-<td>${escapeHTML(item.atendente_nome || "-")}</td>
-<td>
-  ${item.observacao 
-    ? `<div class="obs-cell" title="${escapeAttr(item.observacao)}">${escapeHTML(item.observacao)}</div>` 
-    : `<span class="obs-empty">Sem observação</span>`
-  }
-</td>
-<td>
-  <select
-  class="status-select ${statusClass(item.status)}"
-  onchange="alterarStatusRecebida('${item.id}', this.value)"
->
-  <option value="Dados recebidos" ${item.status === "Dados recebidos" ? "selected" : ""}>Dados recebidos</option>
-  <option value="Enviado para portabilidade" ${item.status === "Enviado para portabilidade" ? "selected" : ""}>Enviado para portabilidade</option>
-  <option value="Portabilidade concluída" ${item.status === "Portabilidade concluída" ? "selected" : ""}>Portabilidade concluída</option>
-  <option value="Erro" ${item.status === "Erro" ? "selected" : ""}>Erro</option>
-</select>
+      <td>${escapeHTML(item.plano_contratado || "Não informado")}</td>
+      <td>${escapeHTML(item.atendente_nome || "-")}</td>
+      <td>
+        ${item.observacao
+          ? `<div class="obs-cell" title="${escapeAttr(item.observacao)}">${escapeHTML(item.observacao)}</div>`
+          : `<span class="obs-empty">Sem observação</span>`
+        }
+      </td>
+      <td>
+        <select class="status-select ${statusClass(item.status)}" onchange="alterarStatusRecebida('${item.id}', this.value)">
+          <option value="Dados recebidos" ${item.status === "Dados recebidos" ? "selected" : ""}>Dados recebidos</option>
+          <option value="Enviado para portabilidade" ${item.status === "Enviado para portabilidade" ? "selected" : ""}>Enviado para portabilidade</option>
+          <option value="Portabilidade concluída" ${item.status === "Portabilidade concluída" ? "selected" : ""}>Portabilidade concluída</option>
+          <option value="Erro" ${item.status === "Erro" ? "selected" : ""}>Erro</option>
+        </select>
       </td>
      <td>
   <div class="actions">
@@ -2128,7 +2727,6 @@ async function alterarStatusRecebida(id, novoStatus) {
   await carregarRecebidas();
   await carregarHistorico();
   await carregarDashboard();
-  await carregarMinhasSolicitacoes();
 }
 
     function renderTermoHTML() {
@@ -2356,50 +2954,20 @@ function gerarTermoPDFBlob(download = false) {
 
   const hoje = new Date().toLocaleDateString("pt-BR");
 
-doc.text(`Local e data: ${formData.cidade}/${formData.estado}, ${hoje}`, margem, y);
-y += 12;
+  doc.text(`Local e data: ${formData.cidade}/${formData.estado}, ${hoje}`, margem, y);
+  y += 12;
 
-/* 
-  Garante espaço para assinatura, nome e rodapé.
-  Se não houver espaço suficiente, cria nova página.
-*/
-if (y > 210) {
-  doc.addPage();
-  y = 20;
-}
+  doc.setFont("helvetica", "bold");
+  doc.text("Assinatura do solicitante:", margem, y);
+  y += 5;
 
-doc.setFont("helvetica", "bold");
-doc.text("Assinatura do solicitante:", margem, y);
-y += 8;
+  if (formData.assinaturaDataUrl) {
+    doc.addImage(formData.assinaturaDataUrl, "PNG", margem, y, 80, 35);
+    y += 40;
+  }
 
-if (formData.assinaturaDataUrl) {
-  doc.addImage(formData.assinaturaDataUrl, "PNG", margem, y, 80, 32);
-  y += 36;
-}
-
-doc.setFont("helvetica", "normal");
-doc.line(margem, y, margem + 90, y);
-y += 7;
-
-const nomeAssinante = formData.nome_titular || "Solicitante";
-const nomeLinhas = doc.splitTextToSize(nomeAssinante, 90);
-doc.text(nomeLinhas, margem, y);
-y += nomeLinhas.length * 6 + 8;
-
-if (y > 270) {
-  doc.addPage();
-  y = 20;
-}
-
-doc.setFontSize(9);
-const textoAssinado = `Assinado eletronicamente no sistema Portabilidade ViaTec em ${new Date().toLocaleString("pt-BR")}.`;
-const textoAssinadoLinhas = doc.splitTextToSize(textoAssinado, 180);
-doc.text(textoAssinadoLinhas, margem, y);
-y += textoAssinadoLinhas.length * 5;
-
-doc.text(`Atendente responsável: ${usuarioLogado?.nome || ""}`, margem, y);
-y += 5;
-doc.text("Versão do termo: v1-2026", margem, y);
+  doc.setFont("helvetica", "normal");
+  doc.line(margem, y, margem + 90, y);
   y += 6;
   doc.text(formData.nome_titular || "Solicitante", margem, y);
 
@@ -2441,14 +3009,14 @@ function formatDateOnly(dateString) {
 
   return dateString;
 }
-
-    function statusClass(status) {
-  if (status === "Enviado para portabilidade") return "enviado";
-  if (status === "Portabilidade concluída") return "concluido";
-  if (status === "Erro") return "erro";
-  return "dados";
-}
     
+    function statusClass(status) {
+      if (status === "Enviado para portabilidade") return "enviado";
+      if (status === "Portabilidade concluída") return "concluido";
+      if (status === "Erro") return "erro";
+      return "dados";
+    }
+
     function statusBadge(status) {
       let cls = "dados";
 
