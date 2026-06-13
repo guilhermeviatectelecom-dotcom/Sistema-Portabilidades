@@ -1507,8 +1507,9 @@ textarea:hover {
 
               <div class="actions">
                 <button type="button" class="btn btn-light" id="btnVoltar" onclick="prevStep()">Voltar</button>
+                <button type="button" class="btn btn-red hidden" id="btnCancelarSolicitacao" onclick="cancelarSolicitacao()">Cancelar solicitação</button>
                 <button type="button" class="btn btn-primary" id="btnProximo" onclick="nextStep()">Próximo</button>
-                <button type="button" class="btn btn-green hidden" id="btnFinalizar" onclick="finalizarSolicitacao()">Finalizar solicitação</button>
+                <button type="button" class="btn btn-green hidden" id="btnFinalizar" onclick="confirmarFinalizacao()">Finalizar solicitação</button>
               </div>
             </form>
 
@@ -2074,6 +2075,7 @@ if (view === "usuarios") carregarUsuarios();
 
   document.getElementById("btnVoltar").classList.toggle("hidden", currentStep === 0);
   document.getElementById("btnProximo").classList.toggle("hidden", currentStep === steps.length - 1);
+  document.getElementById("btnCancelarSolicitacao").classList.toggle("hidden", currentStep !== steps.length - 1);
   document.getElementById("btnFinalizar").classList.toggle("hidden", currentStep !== steps.length - 1);
 
   document.getElementById("wizardMsg").innerHTML = "";
@@ -2135,6 +2137,23 @@ function nextStep() {
 
     function showWizardError(text) {
       document.getElementById("wizardMsg").innerHTML = `<div class="msg error">${text}</div>`;
+    }
+
+    function confirmarFinalizacao() {
+      const confirmar = confirm("Tem certeza que deseja finalizar esta solicitação? Após finalizar, ela será enviada para o NOC e ficará registrada no sistema.");
+
+      if (!confirmar) return;
+
+      finalizarSolicitacao();
+    }
+
+    function cancelarSolicitacao() {
+      const confirmar = confirm("Tem certeza que deseja cancelar esta solicitação? Os dados preenchidos serão apagados.");
+
+      if (!confirmar) return;
+
+      novaSolicitacao();
+      document.getElementById("wizardMsg").innerHTML = `<div class="msg success">Solicitação cancelada. Você pode iniciar uma nova solicitação.</div>`;
     }
 
     async function finalizarSolicitacao() {
