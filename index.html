@@ -2523,14 +2523,15 @@ assinaturaUrl = assinaturaPublicData.publicUrl;
         if (error) throw error;
 
         msg.innerHTML = `
-          <div class="msg success">Solicitação cadastrada com sucesso!</div>
-          <div class="actions">
-            <button type="button" class="btn btn-light" onclick='copiarTexto(${JSON.stringify(data)})'>Copiar resumo</button>
-            <button type="button" class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(data)})'>Gerar PDF</button>
-            <button type="button" class="btn btn-green" onclick='notificarNOC(${JSON.stringify(data)})'>Notificar NOC</button>
-            <button type="button" class="btn btn-dark" onclick="novaSolicitacao()">Nova solicitação</button>
-          </div>
-        `;
+  <div class="msg success">Solicitação cadastrada com sucesso!</div>
+  <div class="actions">
+    <button type="button" class="btn btn-light" onclick='copiarTexto(${JSON.stringify(data)})'>Copiar resumo</button>
+    <button type="button" class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(data)})'>Gerar PDF</button>
+    ${data.whatsapp_cliente ? `<button type="button" class="btn btn-green" onclick='enviarWhatsAppCliente(${JSON.stringify(data)})'>WhatsApp cliente</button>` : ""}
+    <button type="button" class="btn btn-green" onclick='notificarNOC(${JSON.stringify(data)})'>Notificar NOC</button>
+    <button type="button" class="btn btn-dark" onclick="novaSolicitacao()">Nova solicitação</button>
+  </div>
+`;
 
         carregarMinhasSolicitacoes();
 
