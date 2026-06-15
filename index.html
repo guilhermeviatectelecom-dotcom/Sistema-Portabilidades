@@ -2429,12 +2429,6 @@ function nextStep() {
         let termoPdfUrl = null;
 let termoPdfNome = null;
 let assinaturaUrl = null;
-
-if (!formData.assinaturaDataUrl) {
-  msg.innerHTML = `<div class="msg error">O termo precisa estar assinado antes de finalizar.</div>`;
-  return;
-}
-
 const termoPdfBlob = gerarTermoPDFBlob(false);
 const termoPdfFileName = `termo-portabilidade-${Date.now()}-${limparNomeArquivo(formData.nome_titular)}.pdf`;
 const termoPdfPath = `${usuarioLogado.id}/${termoPdfFileName}`;
