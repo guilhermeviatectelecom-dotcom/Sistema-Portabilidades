@@ -1178,20 +1178,24 @@ textarea:hover {
 @media (max-width: 920px) {
   body {
     background: #f3f6fb !important;
+    overflow-x: hidden !important;
   }
 
   .layout {
     display: block !important;
   }
 
-  position: relative !important;
-top: auto !important;
-z-index: auto !important;
+  .sidebar {
+    position: relative !important;
+    top: auto !important;
+    z-index: auto !important;
     height: auto !important;
+    min-height: auto !important;
     padding: 12px !important;
     border-right: none !important;
     border-bottom: 1px solid var(--cinza-borda) !important;
     box-shadow: 0 8px 22px rgba(15, 35, 80, 0.08) !important;
+    overflow: visible !important;
   }
 
   .sidebar-logo {
@@ -1206,9 +1210,7 @@ z-index: auto !important;
     border-radius: 14px !important;
   }
 
-  .sidebar-logo strong {
-    font-size: 17px !important;
-  }
+  .sidebar-logo strong { font-size: 17px !important; }
 
   .user-box {
     margin-bottom: 10px !important;
@@ -1232,13 +1234,6 @@ z-index: auto !important;
     line-height: 1.15 !important;
   }
 
-  .logout {
-    margin-top: 16px !important;
-    width: 100% !important;
-    min-height: 48px !important;
-    order: 99 !important;
-  }
-
   .main {
     padding: 14px !important;
     overflow: visible !important;
@@ -1254,14 +1249,7 @@ z-index: auto !important;
     line-height: 1.1 !important;
   }
 
-  .topbar p {
-    font-size: 14px !important;
-  }
-
-  .topbar .btn,
-  .topbar button {
-    width: 100% !important;
-  }
+  .topbar p { font-size: 14px !important; }
 
   .card {
     padding: 16px !important;
@@ -1287,21 +1275,19 @@ z-index: auto !important;
 
   .actions .btn,
   .actions a.btn,
-  .actions button {
-    width: 100% !important;
-  }
+  .actions button { width: 100% !important; }
 
   input,
   select,
   textarea {
     min-height: 50px !important;
-    font-size: 16px !important; /* evita zoom automático no iPhone */
+    font-size: 16px !important;
     border-radius: 15px !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
-  .password-wrap {
-    gap: 8px !important;
-  }
+  .password-wrap { gap: 8px !important; }
 
   .eye-btn {
     width: 52px !important;
@@ -1324,24 +1310,7 @@ z-index: auto !important;
     line-height: 1.2 !important;
   }
 
-  .filter-card {
-    padding: 14px !important;
-    border-radius: 18px !important;
-  }
-
-  .filter-head {
-    align-items: flex-start !important;
-  }
-
-  .filter-grid-minhas,
-  .filters {
-    grid-template-columns: 1fr !important;
-    gap: 10px !important;
-  }
-
-  .request-card {
-    border-radius: 18px !important;
-  }
+  .request-card { border-radius: 18px !important; }
 
   .minha-card-head {
     grid-template-columns: 1fr !important;
@@ -1349,22 +1318,16 @@ z-index: auto !important;
     gap: 10px !important;
   }
 
-  .minha-card-head .btn {
-    min-height: 46px !important;
-  }
+  .minha-card-head .btn { min-height: 46px !important; }
 
   .minha-main-title strong {
     font-size: 16px !important;
     white-space: normal !important;
   }
 
-  .minha-mini-info {
-    font-size: 13px !important;
-  }
+  .minha-mini-info { font-size: 13px !important; }
 
-  .minha-card-body {
-    padding: 14px !important;
-  }
+  .minha-card-body { padding: 14px !important; }
 
   .minha-details-grid {
     grid-template-columns: 1fr !important;
@@ -1376,13 +1339,8 @@ z-index: auto !important;
     border-radius: 14px !important;
   }
 
-  .table-wrap {
-    border-radius: 18px !important;
-  }
-
-  table {
-    min-width: 900px !important;
-  }
+  .table-wrap { border-radius: 18px !important; }
+  table { min-width: 900px !important; }
 
   td .btn {
     min-height: 38px !important;
@@ -1413,9 +1371,7 @@ z-index: auto !important;
     height: 46px !important;
   }
 
-  #signatureCanvas {
-    height: 220px !important;
-  }
+  #signatureCanvas { height: 220px !important; }
 }
 
 @media (max-width: 430px) {
@@ -1544,8 +1500,7 @@ z-index: auto !important;
 }
 
 /* =========================================================
-   CORREÇÃO FINAL: evita login e sistema aparecerem juntos
-   e impede botões ocultos aparecerem no mobile.
+   CORREÇÃO FINAL: LOGIN, OCULTOS, SAIR E FILTROS LIMPOS
    ========================================================= */
 .hidden,
 #loginPage.hidden,
@@ -1557,11 +1512,90 @@ z-index: auto !important;
 #btnProximo.hidden,
 #btnVoltar.hidden,
 #cancelZoneSolicitacao.hidden,
-#btnCancelarSolicitacao.hidden {
+#btnCancelarSolicitacao.hidden,
+#periodoMinhasBox.hidden {
   display: none !important;
 }
 
+.logout-mobile-bottom {
+  display: none !important;
+}
+
+/* Barra limpa de busca/filtro em Minhas solicitações */
+.minhas-toolbar {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--cinza-borda);
+  border-radius: 22px;
+  padding: 16px;
+  margin: 0 0 18px 0;
+  box-shadow: 0 10px 24px rgba(15, 35, 80, 0.06);
+}
+
+.minhas-toolbar-main {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) auto auto auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.minhas-search input {
+  width: 100%;
+  height: 46px;
+}
+
+.btn-toolbar {
+  min-height: 46px !important;
+  padding: 10px 14px !important;
+  border-radius: 14px !important;
+  font-size: 13px !important;
+  box-shadow: none !important;
+  white-space: nowrap !important;
+}
+
+.btn-refresh-mini {
+  width: 46px !important;
+  min-width: 46px !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  padding: 0 !important;
+  border-radius: 14px !important;
+  font-size: 20px !important;
+}
+
+.periodo-minhas-box {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px dashed #dbe3ef;
+  border-radius: 16px;
+  background: #f8fbff;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.periodo-minhas-box .form-group {
+  margin-bottom: 0;
+}
+
+.mini-count {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 10px 0 0;
+}
+
 @media (max-width: 920px) {
+  html,
+  body,
+  .app,
+  #systemPage,
+  .layout,
+  .main {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
   #systemPage.hidden,
   #loginPage.hidden,
   .layout.hidden,
@@ -1574,17 +1608,6 @@ z-index: auto !important;
   }
 
   .sidebar .logout {
-    margin-top: 42px !important;
-    margin-bottom: 0 !important;
-  }
-}
-    /* Botão sair no final da página no celular */
-.logout-mobile-bottom {
-  display: none !important;
-}
-
-@media (max-width: 920px) {
-  .sidebar .logout {
     display: none !important;
   }
 
@@ -1594,182 +1617,57 @@ z-index: auto !important;
     margin: 28px 0 18px 0 !important;
     min-height: 52px !important;
   }
-}
-    
-/* =========================================================
-   FILTRO MINHAS SOLICITAÇÕES - MOBILE COMPACTO
-   ========================================================= */
 
-@media (max-width: 920px) {
-  .filter-card {
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow: hidden !important;
-    padding: 14px !important;
-  }
-
-  .filter-head {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 12px !important;
-    align-items: stretch !important;
-  }
-
-  .filter-head strong {
-    font-size: 20px !important;
-  }
-
-  .filter-head span {
-    font-size: 13px !important;
-    line-height: 1.35 !important;
-  }
-
-  .btn-filter-toggle {
-    width: 100% !important;
-    min-height: 46px !important;
-  }
-
-  .filtros-mobile-fechado .filter-body {
-    display: none !important;
-  }
-
-  .filter-body {
-    margin-top: 14px !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .filter-grid-minhas {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    gap: 12px !important;
-  }
-
-  .filter-grid-minhas .form-group {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .filter-grid-minhas input,
-  .filter-grid-minhas button {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    box-sizing: border-box !important;
-  }
-
-  .filter-grid-minhas input[type="date"] {
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    min-height: 54px !important;
-    padding: 12px 14px !important;
-  }
-}
-
-@media (min-width: 921px) {
-  .btn-filter-toggle {
-    display: none !important;
-  }
-
-  .filtros-mobile-fechado .filter-body {
+  .topbar {
     display: block !important;
   }
-}
-    /* =========================================================
-   MINHAS SOLICITAÇÕES - FILTRO LIMPO MOBILE/DESKTOP
-   ========================================================= */
 
-.minhas-toolbar {
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid var(--cinza-borda);
-  border-radius: 22px;
-  padding: 16px;
-  margin-bottom: 18px;
-  box-shadow: 0 10px 24px rgba(15, 35, 80, 0.06);
-}
-
-.minhas-search input {
-  width: 100%;
-}
-
-.minhas-toolbar-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 12px;
-  align-items: center;
-}
-
-.btn-mini-filter {
-  min-height: 42px !important;
-  padding: 10px 14px !important;
-  font-size: 13px !important;
-  box-shadow: none !important;
-}
-
-.btn-refresh-mini {
-  width: 44px !important;
-  min-width: 44px !important;
-  height: 44px !important;
-  min-height: 44px !important;
-  padding: 0 !important;
-  border-radius: 14px !important;
-  font-size: 20px !important;
-}
-
-.periodo-minhas-box {
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px dashed #dbe3ef;
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: 10px;
-  align-items: end;
-}
-
-@media (max-width: 920px) {
   .minhas-toolbar {
-    padding: 14px !important;
-    border-radius: 20px !important;
-    margin-bottom: 16px !important;
+    padding: 12px !important;
+    border-radius: 18px !important;
+    margin-bottom: 14px !important;
   }
 
-  .minhas-toolbar-actions {
+  .minhas-toolbar-main {
     display: grid !important;
-    grid-template-columns: 1fr 1fr 54px !important;
+    grid-template-columns: 1fr !important;
     gap: 8px !important;
   }
 
-  .btn-mini-filter {
-    width: 100% !important;
-    min-height: 46px !important;
-    font-size: 13px !important;
+  .minhas-search input {
+    height: 50px !important;
   }
 
+  .btn-toolbar,
   .btn-refresh-mini {
-    width: 54px !important;
-    min-width: 54px !important;
+    width: 100% !important;
+    min-width: 0 !important;
     height: 46px !important;
     min-height: 46px !important;
+  }
+
+  .minhas-toolbar-actions-mobile {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 52px !important;
+    gap: 8px !important;
+  }
+
+  .minhas-toolbar-actions-mobile .btn-refresh-mini {
+    width: 52px !important;
+    min-width: 52px !important;
   }
 
   .periodo-minhas-box {
     grid-template-columns: 1fr !important;
     gap: 10px !important;
+    padding: 12px !important;
   }
 
   .periodo-minhas-box .btn {
     width: 100% !important;
   }
-
-  .mini-count {
-    margin-top: 10px !important;
-    font-size: 13px !important;
-  }
 }
-  </style>
+</style>
 </head>
 
 <body>
@@ -1867,48 +1765,46 @@ z-index: auto !important;
               <h2>Minhas solicitações</h2>
               <p>Acompanhe o status das portabilidades que você cadastrou.</p>
             </div>
-          
+          </div>
+
           <div class="minhas-toolbar">
-  <div class="minhas-search">
-    <input 
-      id="minhasBusca" 
-      placeholder="Buscar por nome, CPF, número ou cidade..." 
-      oninput="renderMinhasSolicitacoes()"
-    >
-  </div>
+            <div class="minhas-toolbar-main">
+              <div class="minhas-search">
+                <input
+                  id="minhasBusca"
+                  placeholder="Buscar por nome, CPF, número ou cidade..."
+                  oninput="renderMinhasSolicitacoes()"
+                >
+              </div>
 
-  <div class="minhas-toolbar-actions">
-    <button type="button" class="btn btn-light btn-mini-filter" onclick="setFiltroMesAtual()">
-      Este mês
-    </button>
+              <div class="minhas-toolbar-actions-mobile">
+                <button type="button" class="btn btn-light btn-toolbar" onclick="setFiltroMesAtual()">Este mês</button>
+                <button type="button" class="btn btn-light btn-toolbar" onclick="togglePeriodoMinhas()">Período</button>
+                <button type="button" class="btn btn-primary btn-refresh-mini" title="Atualizar" onclick="carregarMinhasSolicitacoes()">↻</button>
+              </div>
+            </div>
 
-    <button type="button" class="btn btn-light btn-mini-filter" onclick="togglePeriodoMinhas()">
-      Período
-    </button>
+            <div id="periodoMinhasBox" class="periodo-minhas-box hidden">
+              <div class="form-group">
+                <label>Data inicial</label>
+                <input id="minhasDataInicio" type="date" onchange="renderMinhasSolicitacoes()">
+              </div>
 
-    <button type="button" class="btn btn-primary btn-refresh-mini" onclick="carregarMinhasSolicitacoes()">
-      ↻
-    </button>
-  </div>
+              <div class="form-group">
+                <label>Data final</label>
+                <input id="minhasDataFim" type="date" onchange="renderMinhasSolicitacoes()">
+              </div>
 
-  <div id="periodoMinhasBox" class="periodo-minhas-box hidden">
-    <div class="form-group">
-      <label>Data inicial</label>
-      <input id="minhasDataInicio" type="date" onchange="renderMinhasSolicitacoes()">
-    </div>
+              <button type="button" class="btn btn-light" onclick="limparFiltrosMinhas()">Limpar filtros</button>
+            </div>
 
-    <div class="form-group">
-      <label>Data final</label>
-      <input id="minhasDataFim" type="date" onchange="renderMinhasSolicitacoes()">
-    </div>
+            <p id="minhasFiltroResumo" class="mini-count"></p>
+          </div>
 
-    <button type="button" class="btn btn-light" onclick="limparFiltrosMinhas()">
-      Limpar filtros
-    </button>
-  </div>
+          <div id="minhasLista" class="grid minhas-grid"></div>
+        </section>
 
-  <p id="minhasFiltroResumo" class="mini-count"></p>
-</div>
+
 
         <section id="viewDashboard" class="view hidden admin-only">
           <div class="topbar">
@@ -2868,6 +2764,19 @@ function setFiltroMesAtual() {
 
   document.getElementById("minhasDataInicio").value = `${ano}-${mes}-01`;
   document.getElementById("minhasDataFim").value = `${ano}-${mes}-${String(ultimoDia).padStart(2, "0")}`;
+
+  renderMinhasSolicitacoes();
+}
+
+
+function limparFiltrosMinhas() {
+  const busca = document.getElementById("minhasBusca");
+  const inicio = document.getElementById("minhasDataInicio");
+  const fim = document.getElementById("minhasDataFim");
+
+  if (busca) busca.value = "";
+  if (inicio) inicio.value = "";
+  if (fim) fim.value = "";
 
   renderMinhasSolicitacoes();
 }
