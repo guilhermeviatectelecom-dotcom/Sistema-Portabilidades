@@ -2426,49 +2426,13 @@ function nextStep() {
           anexoUrl = publicData.publicUrl;
           anexoNome = file.name;
         }
-        let termoPdfUrl = null;
+let termoPdfUrl = null;
 let termoPdfNome = null;
 let assinaturaUrl = null;
-const termoPdfBlob = gerarTermoPDFBlob(false);
-const termoPdfFileName = `termo-portabilidade-${Date.now()}-${limparNomeArquivo(formData.nome_titular)}.pdf`;
-const termoPdfPath = `${usuarioLogado.id}/${termoPdfFileName}`;
 
-const { error: termoUploadError } = await supabaseClient.storage
-  .from("termos-portabilidade")
-  .upload(termoPdfPath, termoPdfBlob, {
-    contentType: "application/pdf",
-    upsert: false
-  });
 
-if (termoUploadError) throw termoUploadError;
 
-const { data: termoPublicData } = supabaseClient.storage
-  .from("termos-portabilidade")
-  .getPublicUrl(termoPdfPath);
-
-termoPdfUrl = termoPublicData.publicUrl;
-termoPdfNome = termoPdfFileName;
-
-const assinaturaBlob = dataURLtoBlob(formData.assinaturaDataUrl);
-const assinaturaFileName = `assinatura-${Date.now()}-${limparNomeArquivo(formData.nome_titular)}.png`;
-const assinaturaPath = `${usuarioLogado.id}/${assinaturaFileName}`;
-
-const { error: assinaturaUploadError } = await supabaseClient.storage
-  .from("termos-portabilidade")
-  .upload(assinaturaPath, assinaturaBlob, {
-    contentType: "image/png",
-    upsert: false
-  });
-
-if (assinaturaUploadError) throw assinaturaUploadError;
-
-const { data: assinaturaPublicData } = supabaseClient.storage
-  .from("termos-portabilidade")
-  .getPublicUrl(assinaturaPath);
-
-assinaturaUrl = assinaturaPublicData.publicUrl;
-
-       const payload = {
+  const payload = {
   nome_titular: formData.nome_titular,
   cpf_cnpj: formData.cpf_cnpj,
   whatsapp_cliente: formData.whatsapp_cliente || null,
