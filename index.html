@@ -1595,7 +1595,89 @@ z-index: auto !important;
     min-height: 52px !important;
   }
 }
+    
+/* =========================================================
+   FILTRO MINHAS SOLICITAÇÕES - MOBILE COMPACTO
+   ========================================================= */
 
+@media (max-width: 920px) {
+  .filter-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    padding: 14px !important;
+  }
+
+  .filter-head {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    align-items: stretch !important;
+  }
+
+  .filter-head strong {
+    font-size: 20px !important;
+  }
+
+  .filter-head span {
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+  }
+
+  .btn-filter-toggle {
+    width: 100% !important;
+    min-height: 46px !important;
+  }
+
+  .filtros-mobile-fechado .filter-body {
+    display: none !important;
+  }
+
+  .filter-body {
+    margin-top: 14px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .filter-grid-minhas {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 12px !important;
+  }
+
+  .filter-grid-minhas .form-group {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .filter-grid-minhas input,
+  .filter-grid-minhas button {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .filter-grid-minhas input[type="date"] {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    min-height: 54px !important;
+    padding: 12px 14px !important;
+  }
+}
+
+@media (min-width: 921px) {
+  .btn-filter-toggle {
+    display: none !important;
+  }
+
+  .filtros-mobile-fechado .filter-body {
+    display: block !important;
+  }
+}
   </style>
 </head>
 
@@ -1697,13 +1779,17 @@ z-index: auto !important;
             <button class="btn btn-light" onclick="carregarMinhasSolicitacoes()">Atualizar</button>
           </div>
 
-          <div id="filtrosMinhasCard" class="filter-card">
-            <div class="filter-head">
-              <div>
-                <strong>Filtros de busca</strong>
-                <span>Pesquise por cliente, CPF/CNPJ, número, cidade ou filtre por período.</span>
-              </div>
-            </div>
+          <div id="filtrosMinhasCard" class="filter-card filtros-mobile-fechado">
+           <div class="filter-head">
+  <div>
+    <strong>Filtros de busca</strong>
+    <span>Pesquise por cliente, CPF/CNPJ, número, cidade ou filtre por período.</span>
+  </div>
+
+  <button type="button" class="btn btn-light btn-filter-toggle" onclick="toggleFiltrosMinhas()">
+    Mostrar filtros
+  </button>
+</div>
 
             <div class="filter-body">
               <div class="filter-grid-minhas">
@@ -2677,17 +2763,18 @@ Status: ${dados.status || "Dados recebidos"}`;
       if (btn) btn.textContent = fechado ? "Ver detalhes" : "Ocultar detalhes";
     }
 
-    function limparFiltrosMinhas() {
-      const busca = document.getElementById("minhasBusca");
-      const inicio = document.getElementById("minhasDataInicio");
-      const fim = document.getElementById("minhasDataFim");
+   function toggleFiltrosMinhas() {
+  const card = document.getElementById("filtrosMinhasCard");
+  const btn = document.querySelector(".btn-filter-toggle");
 
-      if (busca) busca.value = "";
-      if (inicio) inicio.value = "";
-      if (fim) fim.value = "";
+  if (!card) return;
 
-      renderMinhasSolicitacoes();
-    }
+  const fechado = card.classList.toggle("filtros-mobile-fechado");
+
+  if (btn) {
+    btn.textContent = fechado ? "Mostrar filtros" : "Ocultar filtros";
+  }
+}
 
     async function carregarDashboard() {
       if (usuarioLogado?.perfil !== "admin") return;
