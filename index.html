@@ -2563,62 +2563,80 @@ async function enviarParaAutentique(item) {
 
   if (!confirmar) return;
 
+  let data = null;
+
   try {
-    const { data, error } = await supabaseClient.functions.invoke("enviar-autentique", {
+    const resposta = await supabaseClient.functions.invoke("enviar-autentique", {
       body: {
         id: item.id
       }
     });
 
-    if (error) {
-      console.error("Erro Edge Function:", error);
+    data = resposta.data;
+
+    if (resposta.error) {
+      console.error("Erro Edge Function:", resposta.error);
       alert("Erro ao chamar a função da Autentique.");
       return;
     }
 
-    if (!data?.ok) {
+    if (!data || data.ok !== true) {
       console.error("Resposta Autentique:", data);
       alert(data?.error || "Erro ao enviar para Autentique.");
       return;
     }
 
-    const itemAtualizado = {
-      ...item,
-      autentique_document_id: data.document_id || item.autentique_document_id,
-      autentique_assinatura_url: data.assinatura_url || item.autentique_assinatura_url,
-      autentique_documento_url: data.documento_url || item.autentique_documento_url,
-      autentique_status: "enviado"
-    };
-
-    alert("Documento enviado para Autentique com sucesso!");
-
-    if (itemAtualizado.autentique_assinatura_url && itemAtualizado.whatsapp_cliente) {
-      const enviarZap = confirm("Deseja enviar o link de assinatura pelo WhatsApp do cliente agora?");
-
-      if (enviarZap) {
-        enviarWhatsAppCliente(itemAtualizado);
-      }
-    }
-
-    try {
-      if (typeof carregarMinhasSolicitacoes === "function") {
-        await carregarMinhasSolicitacoes();
-      }
-
-      if (typeof carregarEmAndamento === "function") {
-        await carregarEmAndamento();
-      }
-
-      if (typeof carregarHistorico === "function") {
-        await carregarHistorico();
-      }
-    } catch (reloadError) {
-      console.warn("Documento enviado, mas houve erro ao atualizar as listas:", reloadError);
-    }
-
   } catch (err) {
-    console.error(err);
-    alert("Erro inesperado ao enviar para Autentique.");
+    console.error("Erro real ao chamar Edge Function:", err);
+    alert("Erro ao chamar a função da Autentique. Veja o console.");
+    return;
+  }
+
+  const itemAtualizado = {
+    ...item,
+    autentique_document_id: data.document_id || item.autentique_document_id,
+    autentique_assinatura_url: data.assinatura_url || item.autentique_assinatura_url,
+    autentique_documento_url: data.documento_url || item.autentique_documento_url,
+    autentique_status: "enviado"
+  };
+
+  alert("Documento enviado para Autentique com sucesso!");
+
+  if (itemAtualizado.autentique_assinatura_url && itemAtualizado.whatsapp_cliente) {
+    const enviarAgora = confirm("Deseja enviar o link de assinatura para o cliente pelo WhatsApp agora?");
+
+    if (enviarAgora) {
+      try {
+        enviarWhatsAppCliente(itemAtualizado);
+      } catch (zapErro) {
+        console.warn("Documento enviado, mas houve erro ao abrir WhatsApp:", zapErro);
+        alert("Documento enviado. Não consegui abrir o WhatsApp automaticamente, mas o link foi salvo no sistema.");
+      }
+    }
+  }
+
+  try {
+    if (typeof carregarMinhasSolicitacoes === "function") {
+      await carregarMinhasSolicitacoes();
+    }
+  } catch (erro) {
+    console.warn("Documento enviado, mas não atualizou Minhas solicitações:", erro);
+  }
+
+  try {
+    if (typeof carregarEmAndamento === "function") {
+      await carregarEmAndamento();
+    }
+  } catch (erro) {
+    console.warn("Documento enviado, mas não atualizou Em andamento:", erro);
+  }
+
+  try {
+    if (typeof carregarHistorico === "function") {
+      await carregarHistorico();
+    }
+  } catch (erro) {
+    console.warn("Documento enviado, mas não atualizou Histórico:", erro);
   }
 }
 
