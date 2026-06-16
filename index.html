@@ -2383,7 +2383,7 @@ function nextStep() {
     }
 
     function confirmarFinalizacao() {
-      const confirmar = confirm("Tem certeza que deseja finalizar esta solicitação? Após finalizar, ela será enviada para o NOC e ficará registrada no sistema.");
+      const confirmar = confirm("Deseja salvar esta solicitação para assinatura? Ela ficará aguardando a assinatura do cliente antes de ser enviada ao NOC.");
 
       if (!confirmar) return;
 
@@ -2467,14 +2467,14 @@ let assinaturaUrl = null;
         if (error) throw error;
 
         msg.innerHTML = `
-  <div class="msg success">Solicitação cadastrada com sucesso!</div>
+  <div class="msg success">Salvar para assinatura!</div>
   <div class="actions" id="acoesSucessoSolicitacao">
     <button type="button" class="btn btn-light" onclick='copiarTexto(${JSON.stringify(data)})'>Copiar resumo</button>
     <button type="button" class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(data)})'>Gerar PDF</button>
     ${data.assinatura_tipo === "autentique" && !data.autentique_document_id && data.autentique_status !== "enviado" && data.autentique_status !== "assinado" ? `<button type="button" class="btn btn-primary" onclick='enviarParaAutentique(${JSON.stringify(data)})'>Enviar para Autentique</button>` : ""}
 ${data.autentique_assinatura_url ? `<a class="btn btn-light" href="${data.autentique_assinatura_url}" target="_blank">Abrir assinatura</a>` : ""}
 ${data.whatsapp_cliente && data.autentique_assinatura_url ? `<button type="button" class="btn btn-green" onclick='enviarWhatsAppCliente(${JSON.stringify(data)})'>Enviar link para assinatura</button>` : ""}
-    <button type="button" class="btn btn-green" onclick='notificarNOC(${JSON.stringify(data)})'>Notificar NOC</button>
+    ${data.status === "Dados recebidos" ? `<button type="button" class="btn btn-green" onclick='notificarNOC(${JSON.stringify(data)})'>Notificar NOC</button>` : ""}
     <button type="button" class="btn btn-dark" onclick="novaSolicitacao()">Nova solicitação</button>
   </div>
 `;
