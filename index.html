@@ -2473,7 +2473,7 @@ let assinaturaUrl = null;
     <button type="button" class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(data)})'>Gerar PDF</button>
     ${data.assinatura_tipo === "autentique" && !data.autentique_document_id ? `<button type="button" class="btn btn-primary" onclick='enviarParaAutentique(${JSON.stringify(data)})'>Enviar para Autentique</button>` : ""}
 ${data.autentique_assinatura_url ? `<a class="btn btn-light" href="${data.autentique_assinatura_url}" target="_blank">Abrir assinatura</a>` : ""}
-${data.whatsapp_cliente ? `<button type="button" class="btn btn-green" onclick='enviarWhatsAppCliente(${JSON.stringify(data)})'>WhatsApp cliente</button>` : ""}
+${data.whatsapp_cliente ? `<button type="button" class="btn btn-green" onclick='enviarWhatsAppCliente(${JSON.stringify(data)})'>Enviar link para assinatura</button>` : ""}
     <button type="button" class="btn btn-green" onclick='notificarNOC(${JSON.stringify(data)})'>Notificar NOC</button>
     <button type="button" class="btn btn-dark" onclick="novaSolicitacao()">Nova solicitação</button>
   </div>
@@ -2600,14 +2600,20 @@ async function enviarParaAutentique(item) {
       }
     }
 
-    await carregarMinhasSolicitacoes();
+    try {
+      if (typeof carregarMinhasSolicitacoes === "function") {
+        await carregarMinhasSolicitacoes();
+      }
 
-    if (typeof carregarEmAndamento === "function") {
-      await carregarEmAndamento();
-    }
+      if (typeof carregarEmAndamento === "function") {
+        await carregarEmAndamento();
+      }
 
-    if (typeof carregarHistorico === "function") {
-      await carregarHistorico();
+      if (typeof carregarHistorico === "function") {
+        await carregarHistorico();
+      }
+    } catch (reloadError) {
+      console.warn("Documento enviado, mas houve erro ao atualizar as listas:", reloadError);
     }
 
   } catch (err) {
@@ -2664,6 +2670,10 @@ function enviarWhatsAppCliente(item) {
     alert("Este cliente não possui WhatsApp cadastrado.");
     return;
   }
+  if (!item.autentique_assinatura_url) {
+  alert("O link de assinatura ainda não foi gerado. Primeiro clique em 'Enviar para Autentique'.");
+  return;
+}
   
 
 let numeroFinal = numero;
@@ -2682,10 +2692,12 @@ if (!numeroFinal.startsWith("55")) {
   numeroFinal = "55" + numeroFinal;
 }
 
-let texto = "";
+if (!item.autentique_assinatura_url) {
+  alert("O link de assinatura ainda não foi gerado. Primeiro clique em 'Enviar para Autentique'.");
+  return;
+}
 
-if (item.autentique_assinatura_url) {
-  texto = `Olá, tudo bem?
+const texto = `Olá, tudo bem?
 
 Aqui é da ViaTec.
 
@@ -2697,17 +2709,6 @@ Cliente: ${item.nome_titular || ""}
 Linha a portar: ${item.numero_linha || ""}
 
 Após assinar, daremos andamento à solicitação de portabilidade.`;
-} else {
-  texto = `Olá, tudo bem?
-
-Aqui é da ViaTec. Recebemos sua solicitação de portabilidade da linha fixa.
-
-Cliente: ${item.nome_titular || ""}
-Linha a portar: ${item.numero_linha || ""}
-Status: ${item.status || "Dados recebidos"}
-
-Assim que o termo de assinatura estiver disponível, enviaremos por aqui.`;
-}
 
   const url = `https://wa.me/${numeroFinal}?text=${encodeURIComponent(texto)}`;
   window.open(url, "_blank");
@@ -2861,7 +2862,7 @@ Assim que o termo de assinatura estiver disponível, enviaremos por aqui.`;
         <button class="btn btn-light" onclick='copiarTexto(${JSON.stringify(item)})'>Copiar</button>
         <button class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(item)})'>PDF</button>
         ${item.termo_pdf_url ? `<a class="btn btn-green" href="${item.termo_pdf_url}" target="_blank">Termo</a>` : ""}
-        ${item.whatsapp_cliente ? `<button class="btn btn-green" onclick='enviarWhatsAppCliente(${JSON.stringify(item)})'>WhatsApp cliente</button>` : ""}
+        ${item.whatsapp_cliente ? `<button class="btn btn-green" onclick='enviarWhatsAppCliente(${JSON.stringify(item)})'>Enviar link para assinatura</button>` : ""}
         <button class="btn btn-green" onclick='notificarNOC(${JSON.stringify(item)})'>Notificar NOC</button>
         </div>
         </div>
