@@ -1743,7 +1743,7 @@ textarea:hover {
               <div class="actions wizard-actions">
                 <button type="button" class="btn btn-light" id="btnVoltar" onclick="prevStep()">Voltar</button>
                 <button type="button" class="btn btn-primary" id="btnProximo" onclick="nextStep()">Próximo</button>
-                <button type="button" class="btn btn-green hidden" id="btnFinalizar" onclick="confirmarFinalizacao()">Finalizar solicitação</button>
+                <button type="button" class="btn btn-green hidden" id="btnFinalizar" onclick="confirmarFinalizacao()">Salvar Assinatura</button>
               </div>
 
               <div class="cancel-zone hidden" id="cancelZoneSolicitacao">
@@ -2453,7 +2453,7 @@ let assinaturaUrl = null;
   termo_versao: "v1-2026",
   assinatura_tipo: "autentique",
   autentique_status: "aguardando_envio",
-  status: "Dados recebidos",
+  status: "Aguardando assinatura",
   atendente_id: usuarioLogado.id,
   atendente_nome: usuarioLogado.nome
 };
@@ -2471,7 +2471,7 @@ let assinaturaUrl = null;
   <div class="actions" id="acoesSucessoSolicitacao">
     <button type="button" class="btn btn-light" onclick='copiarTexto(${JSON.stringify(data)})'>Copiar resumo</button>
     <button type="button" class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(data)})'>Gerar PDF</button>
-    ${data.assinatura_tipo === "autentique" && !data.autentique_document_id ? `<button type="button" class="btn btn-primary" onclick='enviarParaAutentique(${JSON.stringify(data)})'>Enviar para Autentique</button>` : ""}
+    ${data.assinatura_tipo === "autentique" && !data.autentique_document_id && data.autentique_status !== "enviado" && data.autentique_status !== "assinado" ? `<button type="button" class="btn btn-primary" onclick='enviarParaAutentique(${JSON.stringify(data)})'>Enviar para Autentique</button>` : ""}
 ${data.autentique_assinatura_url ? `<a class="btn btn-light" href="${data.autentique_assinatura_url}" target="_blank">Abrir assinatura</a>` : ""}
 ${data.whatsapp_cliente && data.autentique_assinatura_url ? `<button type="button" class="btn btn-green" onclick='enviarWhatsAppCliente(${JSON.stringify(data)})'>Enviar link para assinatura</button>` : ""}
     <button type="button" class="btn btn-green" onclick='notificarNOC(${JSON.stringify(data)})'>Notificar NOC</button>
@@ -2517,7 +2517,7 @@ assinaturaDesenhada = false;
     data_prevista_portabilidade: formData.data_prevista_portabilidade,
     plano_contratado: formData.plano_contratado || "Não informado",
     atendente_nome: usuarioLogado ? usuarioLogado.nome : "",
-    status: "Dados recebidos",
+    status: "Aguardando assinatura",
     termo_aceito: formData.termo_aceito
   };
 
@@ -2585,7 +2585,12 @@ async function enviarParaAutentique(item) {
   if (!item || !item.id) {
     alert("Solicitação inválida.");
     return;
+   
   }
+  if (item.autentique_document_id || item.autentique_status === "enviado" || item.autentique_status === "assinado") {
+  alert("Este termo já foi enviado para a Autentique. Use o botão 'Enviar link para assinatura'.");
+  return;
+}
 
   const confirmar = confirm(`Enviar o termo de portabilidade de ${item.nome_titular || "cliente"} para a Autentique?`);
 
@@ -2705,6 +2710,57 @@ Após assinar, daremos andamento à solicitação de portabilidade.`;
 
   const url = `https://wa.me/${numeroFinal}?text=${encodeURIComponent(texto)}`;
   window.open(url, "_blank");
+}
+    async function finalizarEnviarNOC(item) {
+  if (!item || !item.id) {
+    alert("Solicitação inválida.");
+    return;
+  }
+
+  if (!(item.termo_aceito === true || item.autentique_status === "assinado")) {
+    alert("Essa solicitação ainda não foi assinada pelo cliente.");
+    return;
+  }
+
+  if (item.status === "Dados recebidos") {
+    alert("Essa solicitação já foi enviada ao NOC.");
+    return;
+  }
+
+  const confirmar = confirm(`Finalizar e enviar a solicitação de ${item.nome_titular || "cliente"} para o NOC?`);
+  if (!confirmar) return;
+
+  try {
+    const { error } = await supabaseClient
+      .from("portabilidades")
+      .update({
+        status: "Dados recebidos"
+      })
+      .eq("id", item.id);
+
+    if (error) {
+      console.error("Erro ao enviar para o NOC:", error);
+      alert("Erro ao enviar para o NOC.");
+      return;
+    }
+
+    alert("Solicitação enviada ao NOC com sucesso!");
+
+    if (typeof carregarMinhasSolicitacoes === "function") {
+      await carregarMinhasSolicitacoes();
+    }
+
+    if (typeof carregarEmAndamento === "function") {
+      await carregarEmAndamento();
+    }
+
+    if (typeof carregarHistorico === "function") {
+      await carregarHistorico();
+    }
+  } catch (err) {
+    console.error("Erro inesperado ao enviar para o NOC:", err);
+    alert("Erro inesperado ao enviar para o NOC.");
+  }
 }
 
     function gerarPDF(item) {
@@ -2851,12 +2907,13 @@ Após assinar, daremos andamento à solicitação de portabilidade.`;
               ${item.observacao ? escapeHTML(item.observacao) : "Sem observação"}
             </div>
 
-           <div class="actions">
-        <button class="btn btn-light" onclick='copiarTexto(${JSON.stringify(item)})'>Copiar</button>
-        <button class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(item)})'>PDF</button>
-        ${item.termo_pdf_url ? `<a class="btn btn-green" href="${item.termo_pdf_url}" target="_blank">Termo</a>` : ""}
-        ${item.whatsapp_cliente && item.autentique_assinatura_url ? `<button class="btn btn-green" onclick='enviarWhatsAppCliente(${JSON.stringify(item)})'>Enviar link para assinatura</button>` : ""}
-        <button class="btn btn-green" onclick='notificarNOC(${JSON.stringify(item)})'>Notificar NOC</button>
+         <div class="actions">
+  <button class="btn btn-light" onclick='copiarTexto(${JSON.stringify(item)})'>Copiar</button>
+  <button class="btn btn-primary" onclick='gerarPDF(${JSON.stringify(item)})'>PDF</button>
+  ${item.termo_pdf_url ? `<a class="btn btn-green" href="${item.termo_pdf_url}" target="_blank">Termo</a>` : ""}
+  ${item.whatsapp_cliente && item.autentique_assinatura_url ? `<button class="btn btn-green" onclick='enviarWhatsAppCliente(${JSON.stringify(item)})'>Enviar link para assinatura</button>` : ""}
+  ${(item.termo_aceito === true || item.autentique_status === "assinado") && item.status !== "Dados recebidos" ? `<button class="btn btn-primary" onclick='finalizarEnviarNOC(${JSON.stringify(item)})'>Finalizar e enviar ao NOC</button>` : ""}
+  ${item.status === "Dados recebidos" ? `<button class="btn btn-green" onclick='notificarNOC(${JSON.stringify(item)})'>Notificar NOC</button>` : ""}
         </div>
         </div>
       `).join("");
