@@ -2644,13 +2644,39 @@ function enviarWhatsAppCliente(item) {
   }
   
 
-  let numeroFinal = numero;
+let numeroFinal = numero;
 
-  if (!numeroFinal.startsWith("55")) {
-    numeroFinal = "55" + numeroFinal;
-  }
+// Remove zeros no começo, se tiver
+numeroFinal = numeroFinal.replace(/^0+/, "");
 
-   const texto = `Olá, tudo bem?
+// Se vier como DDD + número, exemplo: 55 9 9999-9999,
+// adiciona o código do Brasil na frente.
+if (numeroFinal.length === 10 || numeroFinal.length === 11) {
+  numeroFinal = "55" + numeroFinal;
+}
+
+// Se ainda não começar com 55, adiciona Brasil
+if (!numeroFinal.startsWith("55")) {
+  numeroFinal = "55" + numeroFinal;
+}
+
+let texto = "";
+
+if (item.autentique_assinatura_url) {
+  texto = `Olá, tudo bem?
+
+Aqui é da ViaTec.
+
+Segue o link para assinatura do termo de portabilidade da sua linha fixa:
+
+${item.autentique_assinatura_url}
+
+Cliente: ${item.nome_titular || ""}
+Linha a portar: ${item.numero_linha || ""}
+
+Após assinar, daremos andamento à solicitação de portabilidade.`;
+} else {
+  texto = `Olá, tudo bem?
 
 Aqui é da ViaTec. Recebemos sua solicitação de portabilidade da linha fixa.
 
@@ -2658,7 +2684,8 @@ Cliente: ${item.nome_titular || ""}
 Linha a portar: ${item.numero_linha || ""}
 Status: ${item.status || "Dados recebidos"}
 
-Assim que houver atualização, entraremos em contato por aqui.`;
+Assim que o termo de assinatura estiver disponível, enviaremos por aqui.`;
+}
 
   const url = `https://wa.me/${numeroFinal}?text=${encodeURIComponent(texto)}`;
   window.open(url, "_blank");
