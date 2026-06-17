@@ -1668,10 +1668,11 @@ textarea:hover {
   }
 }
 
-    .tabs-minhas {
+ .tabs-minhas {
   display: flex;
-  gap: 10px;
-  margin: 14px 0 8px;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 6px;
   flex-wrap: wrap;
 }
 
@@ -1681,9 +1682,10 @@ textarea:hover {
   color: #003f91;
   font-weight: 800;
   border-radius: 14px;
-  padding: 10px 16px;
+  padding: 9px 15px;
   cursor: pointer;
   transition: 0.2s;
+  min-height: 42px;
 }
 
 .tab-minhas:hover {
@@ -1694,7 +1696,23 @@ textarea:hover {
   background: #0b63f6;
   color: #fff;
   border-color: #0b63f6;
-  box-shadow: 0 10px 20px rgba(11, 99, 246, 0.18);
+  box-shadow: 0 10px 20px rgba(11, 99, 246, 0.16);
+}
+
+.minhas-toolbar {
+  padding-bottom: 14px;
+}
+
+.minhas-toolbar-main {
+  gap: 8px;
+}
+
+.minhas-search {
+  width: 100%;
+}
+
+.minhas-search input {
+  width: 100%;
 }
 
     
@@ -1819,9 +1837,7 @@ textarea:hover {
   </button>
 </div>
 
-              <div class="minhas-toolbar-actions-mobile">
-                <button type="button" class="btn btn-light btn-toolbar" onclick="setFiltroMesAtual()">Este mês</button>
-                <button type="button" class="btn btn-light btn-toolbar" onclick="togglePeriodoMinhas()">Período</button>
+                <button type="button" class="btn btn-light btn-toolbar" onclick="togglePeriodoMinhas()">Filtro</button>
                 <button type="button" class="btn btn-primary btn-refresh-mini" title="Atualizar" onclick="carregarMinhasSolicitacoes()">↻</button>
               </div>
             </div>
