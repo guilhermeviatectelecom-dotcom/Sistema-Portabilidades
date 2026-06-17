@@ -1500,7 +1500,7 @@ textarea:hover {
 }
 
 /* =========================================================
-   CORREÇÃO FINAL: LOGIN, OCULTOS, SAIR E FILTROS LIMPOS
+   CORREÇÃO FINAL: LOGIN, OCULTOS, SAIR E MINHAS SOLICITAÇÕES
    ========================================================= */
 .hidden,
 #loginPage.hidden,
@@ -1527,15 +1527,18 @@ textarea:hover {
   border: 1px solid var(--cinza-borda);
   border-radius: 22px;
   padding: 16px;
-  margin: 0 0 18px 0;
+  margin: 0 0 12px 0;
   box-shadow: 0 10px 24px rgba(15, 35, 80, 0.06);
 }
 
 .minhas-toolbar-main {
-  display: grid;
-  grid-template-columns: minmax(260px, 1fr) auto auto auto;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
-  align-items: center;
+}
+
+.minhas-search {
+  width: 100%;
 }
 
 .minhas-search input {
@@ -1543,8 +1546,40 @@ textarea:hover {
   height: 46px;
 }
 
+.tabs-minhas {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+.tab-minhas {
+  border: 1px solid #d7e3f8;
+  background: #f8fbff;
+  color: #003f91;
+  font-weight: 800;
+  border-radius: 14px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: 0.2s;
+  min-height: 44px;
+  box-shadow: 0 6px 16px rgba(15, 35, 80, 0.06);
+}
+
+.tab-minhas:hover {
+  background: #eef5ff;
+}
+
+.tab-minhas.active {
+  background: #0b63f6;
+  color: #fff;
+  border-color: #0b63f6;
+  box-shadow: 0 8px 16px rgba(11, 99, 246, 0.16);
+}
+
 .btn-toolbar {
-  min-height: 46px !important;
+  min-height: 44px !important;
   padding: 10px 14px !important;
   border-radius: 14px !important;
   font-size: 13px !important;
@@ -1555,8 +1590,8 @@ textarea:hover {
 .btn-refresh-mini {
   width: 46px !important;
   min-width: 46px !important;
-  height: 46px !important;
-  min-height: 46px !important;
+  height: 44px !important;
+  min-height: 44px !important;
   padding: 0 !important;
   border-radius: 14px !important;
   font-size: 20px !important;
@@ -1578,10 +1613,18 @@ textarea:hover {
   margin-bottom: 0;
 }
 
+.periodo-minhas-box .btn {
+  min-height: 46px !important;
+}
+
 .mini-count {
   color: var(--muted);
   font-size: 13px;
-  margin: 10px 0 0;
+  margin: 8px 0 12px;
+}
+
+.minhas-grid {
+  grid-template-columns: 1fr;
 }
 
 @media (max-width: 920px) {
@@ -1625,12 +1668,10 @@ textarea:hover {
   .minhas-toolbar {
     padding: 12px !important;
     border-radius: 18px !important;
-    margin-bottom: 14px !important;
+    margin-bottom: 12px !important;
   }
 
   .minhas-toolbar-main {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
     gap: 8px !important;
   }
 
@@ -1638,23 +1679,24 @@ textarea:hover {
     height: 50px !important;
   }
 
+  .tabs-minhas {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px !important;
+  }
+
+  .tabs-minhas .btn-refresh-mini {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .tab-minhas,
   .btn-toolbar,
   .btn-refresh-mini {
     width: 100% !important;
     min-width: 0 !important;
     height: 46px !important;
     min-height: 46px !important;
-  }
-
-  .minhas-toolbar-actions-mobile {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr 52px !important;
-    gap: 8px !important;
-  }
-
-  .minhas-toolbar-actions-mobile .btn-refresh-mini {
-    width: 52px !important;
-    min-width: 52px !important;
   }
 
   .periodo-minhas-box {
@@ -1668,206 +1710,8 @@ textarea:hover {
   }
 }
 
- .tabs-minhas {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 10px 0 6px;
-  flex-wrap: wrap;
-}
 
-.tab-minhas {
-  border: 1px solid #d7e3f8;
-  background: #f8fbff;
-  color: #003f91;
-  font-weight: 800;
-  border-radius: 14px;
-  padding: 9px 15px;
-  cursor: pointer;
-  transition: 0.2s;
-  min-height: 42px;
-}
-
-.tab-minhas:hover {
-  background: #eef5ff;
-}
-
-.tab-minhas.active {
-  background: #0b63f6;
-  color: #fff;
-  border-color: #0b63f6;
-  box-shadow: 0 10px 20px rgba(11, 99, 246, 0.16);
-}
-
-.minhas-toolbar {
-  padding-bottom: 14px;
-}
-
-.minhas-toolbar-main {
-  gap: 8px;
-}
-
-.minhas-search {
-  width: 100%;
-}
-
-.minhas-search input {
-  width: 100%;
-}
-
-    .minhas-toolbar {
-  padding: 16px;
-  margin-bottom: 14px;
-}
-
-.minhas-toolbar-main {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.minhas-search {
-  width: 100%;
-}
-
-.minhas-search input {
-  width: 100%;
-}
-
-.tabs-minhas {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  flex-wrap: wrap;
-}
-
-.tab-minhas {
-  border: 1px solid #d7e3f8;
-  background: #f8fbff;
-  color: #003f91;
-  font-weight: 800;
-  border-radius: 14px;
-  padding: 9px 15px;
-  cursor: pointer;
-  transition: 0.2s;
-  min-height: 42px;
-}
-
-.tab-minhas:hover {
-  background: #eef5ff;
-}
-
-.tab-minhas.active {
-  background: #0b63f6;
-  color: #fff;
-  border-color: #0b63f6;
-  box-shadow: 0 8px 16px rgba(11, 99, 246, 0.16);
-}
-
-.periodo-minhas-box {
-  position: static !important;
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  align-items: end;
-  gap: 10px;
-  margin-top: 12px;
-  padding: 12px;
-  border: 1px dashed #d8e4f7;
-  border-radius: 16px;
-  background: #f8fbff;
-}
-
-.periodo-minhas-box.hidden {
-  display: none !important;
-}
-
-.periodo-minhas-box .form-group {
-  margin: 0;
-}
-
-.periodo-minhas-box input {
-  width: 100%;
-}
-
-@media (max-width: 700px) {
-  .periodo-minhas-box {
-    grid-template-columns: 1fr;
-  }
-
-  .tabs-minhas {
-    gap: 6px;
-  }
-
-  .tab-minhas,
-  .btn-toolbar,
-  .btn-refresh-mini {
-    flex: 1;
-    min-width: 120px;
-  }
-}
-
-#minhasLista,
-.minhas-lista,
-.minhas-cards,
-.minhas-grid {
-  margin-top: 12px !important;
-  padding-top: 0 !important;
-  position: static !important;
-  transform: none !important;
-}
-
-#viewMinhas .minhas-toolbar {
-  margin-bottom: 10px !important;
-}
-
-#viewMinhas .periodo-minhas-box {
-  margin-bottom: 10px !important;
-}
-
-#viewMinhas .list,
-#viewMinhas .cards,
-#viewMinhas .resultados {
-  margin-top: 10px !important;
-}
-
-#viewMinhas {
-  align-content: flex-start !important;
-}
-
-#viewMinhas {
-  display: block !important;
-}
-
-#viewMinhas .minhas-toolbar {
-  margin-bottom: 10px !important;
-  padding-bottom: 10px !important;
-}
-
-#minhasFiltroResumo {
-  margin: 8px 0 10px 0 !important;
-  padding: 0 !important;
-}
-
-#minhasLista.grid,
-#minhasLista.minhas-grid,
-#minhasLista {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
-  gap: 10px !important;
-  margin-top: 0 !important;
-  padding-top: 0 !important;
-  min-height: 0 !important;
-  height: auto !important;
-  align-content: start !important;
-  align-items: start !important;
-}
-
-#minhasLista > * {
-  margin-top: 0 !important;
-}
-    
-</style>
+    </style>
 </head>
 
 <body>
@@ -1943,7 +1787,7 @@ textarea:hover {
               <div class="actions wizard-actions">
                 <button type="button" class="btn btn-light" id="btnVoltar" onclick="prevStep()">Voltar</button>
                 <button type="button" class="btn btn-primary" id="btnProximo" onclick="nextStep()">Próximo</button>
-                <button type="button" class="btn btn-green hidden" id="btnFinalizar" onclick="confirmarFinalizacao()">Salvar Assinatura</button>
+                <button type="button" class="btn btn-green hidden" id="btnFinalizar" onclick="confirmarFinalizacao()">Salvar para assinatura</button>
               </div>
 
               <div class="cancel-zone hidden" id="cancelZoneSolicitacao">
@@ -1967,59 +1811,56 @@ textarea:hover {
             </div>
           </div>
 
-         <div class="minhas-toolbar">
-  <div class="minhas-toolbar-main">
-    <div class="minhas-search">
-      <input
-        id="minhasBusca"
-        placeholder="Buscar por nome, CPF, número ou cidade..."
-        oninput="renderMinhasSolicitacoes()"
-      >
-    </div>
+          <div class="minhas-toolbar">
+            <div class="minhas-toolbar-main">
+              <div class="minhas-search">
+                <input
+                  id="minhasBusca"
+                  placeholder="Buscar por nome, CPF, número ou cidade..."
+                  oninput="renderMinhasSolicitacoes()"
+                >
+              </div>
 
-    <div class="tabs-minhas">
-      <button type="button" id="abaMinhasAndamento" class="tab-minhas active" onclick="trocarAbaMinhasSolicitacoes('andamento')">
-        Em andamento
-      </button>
+              <div class="tabs-minhas">
+                <button type="button" id="abaMinhasAndamento" class="tab-minhas active" onclick="trocarAbaMinhasSolicitacoes('andamento')">
+                  Em andamento
+                </button>
 
-      <button type="button" id="abaMinhasFinalizadas" class="tab-minhas" onclick="trocarAbaMinhasSolicitacoes('finalizadas')">
-        Finalizadas
-      </button>
+                <button type="button" id="abaMinhasFinalizadas" class="tab-minhas" onclick="trocarAbaMinhasSolicitacoes('finalizadas')">
+                  Finalizadas
+                </button>
 
-      <button type="button" class="btn btn-light btn-toolbar" onclick="togglePeriodoMinhas()">
-        Filtro
-      </button>
+                <button type="button" class="btn btn-light btn-toolbar" onclick="togglePeriodoMinhas()">
+                  Filtro
+                </button>
 
-      <button type="button" class="btn btn-primary btn-refresh-mini" title="Atualizar" onclick="carregarMinhasSolicitacoes()">
-        ↻
-      </button>
-    </div>
-  </div>
+                <button type="button" class="btn btn-primary btn-refresh-mini" title="Atualizar" onclick="carregarMinhasSolicitacoes()">
+                  ↻
+                </button>
+              </div>
+            </div>
 
-  <div id="periodoMinhasBox" class="periodo-minhas-box hidden">
-    <div class="form-group">
-      <label>Data inicial</label>
-      <input type="date" id="minhasDataInicio" onchange="renderMinhasSolicitacoes()">
-    </div>
+            <div id="periodoMinhasBox" class="periodo-minhas-box hidden">
+              <div class="form-group">
+                <label>Data inicial</label>
+                <input type="date" id="minhasDataInicio" onchange="renderMinhasSolicitacoes()">
+              </div>
 
-    <div class="form-group">
-      <label>Data final</label>
-      <input type="date" id="minhasDataFim" onchange="renderMinhasSolicitacoes()">
-    </div>
+              <div class="form-group">
+                <label>Data final</label>
+                <input type="date" id="minhasDataFim" onchange="renderMinhasSolicitacoes()">
+              </div>
 
-    <button type="button" class="btn btn-light" onclick="limparPeriodoMinhas()">
-      Limpar filtros
-    </button>
-  </div>
-</div>
-
-            <p id="minhasFiltroResumo" class="mini-count"></p>
+              <button type="button" class="btn btn-light" onclick="limparFiltrosMinhas()">
+                Limpar filtros
+              </button>
+            </div>
           </div>
+
+          <p id="minhasFiltroResumo" class="mini-count"></p>
 
           <div id="minhasLista" class="grid minhas-grid"></div>
         </section>
-
-
 
         <section id="viewDashboard" class="view hidden admin-only">
           <div class="topbar">
@@ -2853,10 +2694,6 @@ async function enviarParaAutentique(item) {
 
   mostrarBotaoEnviarLinkAssinatura(itemAtualizado);
 
-alert("Documento enviado para Autentique com sucesso!");
-
-mostrarBotaoEnviarLinkAssinatura(itemAtualizado);
-
   try {
     if (typeof carregarMinhasSolicitacoes === "function") {
       await carregarMinhasSolicitacoes();
@@ -3109,7 +2946,8 @@ if (abaAndamento && abaFinalizadas) {
       }
 
       if (resumo) {
-        resumo.textContent = `Mostrando ${lista.length} de ${minhasCache.length} solicitação(ões).`;
+        const nomeAba = filtroMinhasSolicitacoes === "finalizadas" ? "finalizadas" : "em andamento";
+        resumo.textContent = `Mostrando ${lista.length} solicitação(ões) ${nomeAba}.`;
       }
 
       if (minhasCache.length === 0) {
